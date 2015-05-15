@@ -1,12 +1,18 @@
-CFLAGS=-std=c11 -Wall -D_POSIX_C_SOURCE -ggdb
+CFLAGS=-std=c11 -Wall -D_POSIX_C_SOURCE -ggdb -Ireactor -Imock
 
-all: test_reactor test_composite test_spawn
+.PHONY=subdirs
 
-test_reactor: test_reactor.o reactor.o
+all: subdirs test_keyboard
 
-test_composite: test_composite.o reactor.o composite_handler.o decimation_handler.o
+test_keyboard: test_keyboard.o keyboard_handler.o \
+	reactor/spawn_handler.o reactor/reactor.o \
+	mock/wiringPi.o
 
-test_spawn: test_spawn.o reactor.o spawn_handler.o
+subdirs:
+	$(MAKE) -C reactor
+	$(MAKE) -C mock
 
 clean:
 	$(RM) *~ *.o
+	$(MAKE) -C reactor clean
+	$(MAKE) -C mock clean
