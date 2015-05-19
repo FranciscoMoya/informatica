@@ -1,7 +1,8 @@
 #ifndef MUSIC_PLAYER_H
 #define MUSIC_PLAYER_H
 
-// This is a spawn_handler designed to be used as a music player.
+// This is a spawn_handler designed to be used as a music
+// player. Child side is hidden from the user.
 
 #include "spawn_handler.h"
 

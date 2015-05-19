@@ -10,9 +10,13 @@ static void quit_music_player(reactor* r, music_player* mp);
 
 int main(int argc, char* argv[])
 {
+    char* path = (argc > 1
+                  ? argv[1]
+                  : "/usr/share/scratch/Media/Sounds/Music Loops");
+
     void* state = console_set_raw_mode(0);
     reactor* r = reactor_new();
-    event_handler* ev = music_player_new(argv[1]);
+    event_handler* ev = music_player_new(path);
     music_player* mp = (music_player*) ev;
 
     void keyboard(event_handler* ev) {

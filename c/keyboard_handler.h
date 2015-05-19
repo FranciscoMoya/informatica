@@ -7,7 +7,8 @@
 // several I2C transactions).
 
 // The parent side is a regular event handler while the child side is
-// meant to be used as a timeout handler.
+// meant to be used as a timeout handler. Child side is currently
+// hidden from users.
 
 #include "spawn_handler.h"
 
@@ -22,16 +23,17 @@ struct keyboard_handler_ {
     spawn_handler ev;
     keyboard_handler_function key_press;
     keyboard_handler_function key_release;
-    int num_keys;
-    int keys[KEYBOARD_HANDLER_MAX_KEYS];
     int status[KEYBOARD_HANDLER_MAX_KEYS];
+    int num_keys;
+    int* keys;
 };
 
-event_handler* keyboard_handler_new (keyboard_handler_function press,
+event_handler* keyboard_handler_new (int* keys, int num_keys,
+                                     keyboard_handler_function press,
                                      keyboard_handler_function release);
 void keyboard_handler_construct (keyboard_handler* ev,
+                                 int* keys, int num_keys,
                                  keyboard_handler_function press,
                                  keyboard_handler_function release);
-void keyboard_handler_add_keys (keyboard_handler* ev, int count, ...);
 
 #endif
