@@ -28,6 +28,7 @@ void keyboard_handler_construct (keyboard_handler* ev,
     ev->num_keys = 0;
     memset(ev->status, 0, sizeof(ev->status));
     spawn_handler_construct(&ev->ev, keyboard_parent_handler, keyboard_child_handler);
+    spawn_handler_stay_forever_on_child(&ev->ev);
 }
 
 

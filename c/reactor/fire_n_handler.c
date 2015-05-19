@@ -1,5 +1,5 @@
 #include "fire_n_handler.h"
-
+#include <stdlib.h>
 
 static void fire_n_handle_events(event_handler* ev)
 {
@@ -14,7 +14,7 @@ static void fire_n_handle_events(event_handler* ev)
 event_handler* fire_n_handler_new (int fd, event_handler_function handler)
 {
     fire_n_handler* h = malloc(sizeof(fire_n_handler));
-    fire_n_handler_construct(h, fd, handle);
+    fire_n_handler_construct(h, fd, handler);
     h->ev.destroy = (event_handler_function) free;
     return &h->ev;
 }

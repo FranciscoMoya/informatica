@@ -37,15 +37,14 @@ int main()
 {
     reactor* r  = reactor_new();
     event_handler* ev = spawn_handler_new(parent, child);
-    reactor_add(r, ev);
+
+    void quit() { reactor_quit(r); }
 
     spawn_handler* h = (spawn_handler*) ev;
-    if (h->pid) {
-        void quit() { reactor_quit(r); }
-
-        reactor_set_timeout(r, 1000, event_handler_new(-1, quit));
-        write(h->out, "main", 5);
-    }
+    spawn_handler_stay_forever_on_child(h);
+    reactor_add(r, ev);
+    reactor_set_timeout(r, 1000, event_handler_new(-1, quit));
+    write(h->out, "main", 5);
 
     reactor_run(r);
     reactor_destroy(r);

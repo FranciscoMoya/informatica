@@ -17,7 +17,6 @@ static void led_set_status(int led, int status);
 
 void led_handler_construct (led_handler* h, int led)
 {
-    event_handler* ev = &h->ev.ev;
     h->led = led;
     h->status = 0;
     fire_n_handler_construct(&h->ev, -1, led_handle_events);

@@ -14,3 +14,8 @@ int digitalRead (int pin)
     printf("digitalRead %d -> %d\n", pin, values[i]);
     return values[i++];
 }
+
+void digitalWrite (int pin, int value)
+{
+    printf("digitalWrite %d <- %d\n", pin, value);
+}

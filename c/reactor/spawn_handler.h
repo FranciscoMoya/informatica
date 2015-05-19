@@ -26,4 +26,8 @@ void spawn_handler_construct (spawn_handler* ev,
                               event_handler_function parent_handle,
                               event_handler_function child_handle);
 
+int spawn_handler_is_child (spawn_handler* ev);
+
+void spawn_handler_stay_forever_on_child (spawn_handler* ev);
+
 #endif

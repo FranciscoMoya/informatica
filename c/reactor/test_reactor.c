@@ -1,12 +1,10 @@
 #include "reactor.h"
+#include "console.h"
 #include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-void timeout(event_handler* ev)
-{
-    puts("Timeout");
-}
+void timeout(event_handler* ev) { puts("Timeout"); }
 
 typedef struct {
     event_handler ev;
@@ -37,10 +35,12 @@ event_handler* keyboard_handler_new(reactor* r)
 
 int main()
 {
+    void* state = console_set_raw_mode(0);
     reactor* r = reactor_new();
     event_handler* ev = event_handler_new(-1, timeout);
     event_handler* kb = keyboard_handler_new(r);
     reactor_add(r, kb);
     reactor_set_timeout(r, 1000, ev);
     reactor_run(r);
+    console_restore(0, state);
 }

@@ -3,6 +3,8 @@
 #include <stdlib.h>
 
 #define NELEMS(x) (sizeof(x)/sizeof(x[0]))
+#define START_THRESHOLD 30
+#define STOP_THRESHOLD 5
 
 static int detect_motion(motion_detector* m);
 

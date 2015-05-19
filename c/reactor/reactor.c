@@ -44,8 +44,7 @@ reactor* reactor_new ()
 
 void reactor_construct (reactor* r)
 {
-    r->running = 1;
-    r->paused = 0;
+    r->running = r->paused = 0;
     FD_ZERO(&r->fds);
     r->max_fd = 0;
     r->num_handlers = 0;
@@ -65,6 +64,7 @@ static void reactor_demultiplex_events (reactor* r);
 
 void reactor_run (reactor* r)
 {
+    r->running = 1;
     while(r->running)
         reactor_demultiplex_events(r);
 }
