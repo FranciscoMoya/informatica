@@ -23,6 +23,19 @@ void led_handler_construct (led_handler* h, int led)
     led_set_status(h->led, h->status);
 }
 
+void led_handler_set (led_handler* h, int status)
+{
+    fire_n_handler_repeat(&h->ev, 0);
+    h->status = status;
+    led_set_status(h->led, h->status);
+}
+
+
+void led_handler_toggle (led_handler* h)
+{
+    led_handler_set(h, !h->status);
+}
+
 
 void led_handler_blink (led_handler* h, int n)
 {

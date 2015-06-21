@@ -4,7 +4,7 @@ BINARIES= subdirs \
 	  test_keyboard test_led test_multi_mode \
 	  test_ring_buffer test_music_player
 
-.PHONY=subdirs
+.PHONY=subdirs dist
 
 all: $(BINARIES)
 
@@ -35,7 +35,9 @@ test_music_player: test_music_player.o music_player.o \
 subdirs:
 	$(MAKE) -C mock
 
+dist:
+	tar -czvf reactor-`date -I`.tgz `find . -name \*.c -o -name \*.h -o -name makefile`
+
 clean:
-	$(RM) *~ *.o $(BINARIES)
-	$(MAKE) -C reactor clean
+	$(RM) *~ *.o $(BINARIES) *.tgz
 	$(MAKE) -C mock clean

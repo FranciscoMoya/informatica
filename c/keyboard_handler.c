@@ -39,16 +39,6 @@ void keyboard_handler_construct (keyboard_handler* ev,
 }
 
 
-void keyboard_handler_add_keys (keyboard_handler* ev, int count, ...)
-{
-    va_list ap;
-    va_start (ap, count);
-    for (int i = 0; i < count; ++i)
-        ev->keys[ev->num_keys++] = va_arg (ap, int);
-    va_end (ap);
-}
-
-
 static int keyboard_recv_key(keyboard_handler* h, int* key, int* status);
 
 static void keyboard_parent_handler(event_handler* ev)

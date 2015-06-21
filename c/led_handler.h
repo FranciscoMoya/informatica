@@ -17,8 +17,8 @@ struct led_handler_ {
 
 event_handler* led_handler_new (int led);
 void led_handler_construct (led_handler* ev, int led);
+void led_handler_set (led_handler* h, int status);
+void led_handler_toggle (led_handler* h);
 void led_handler_blink (led_handler* ev, int n);
-
-#define led_handler_off(ev) led_handler_blink(ev,0)
 
 #endif
