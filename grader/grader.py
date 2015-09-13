@@ -79,7 +79,7 @@ def initialize_logfile():
 
 def download_folder(id, dest):
     try:
-        service = initialize_service(),
+        service = initialize_service()
         folder = service.files().get(fileId = id).execute()
         print 'Downloading drive folder', folder['title']
         get_folder_contents(service, folder, dest)
