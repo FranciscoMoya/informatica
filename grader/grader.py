@@ -2,9 +2,7 @@
 """Simple grader application for Python programs
 
 Heavily based on drive.py application by Vignesh Nandha Kumar,
-available on GitHub:
-
-https://github.com/vikynandha/google-drive-backup.git
+available on https://github.com/vikynandha/google-drive-backup.git
 """
 
 __author__ = 'fco.moya@gmail.com (Francisco Moya)'
@@ -187,7 +185,8 @@ def is_gdrive_file(item):
 
 
 def log(str):
-    str = unicode(str, 'utf-8')
+    if not type(str) is unicode:
+        str = unicode(str, 'utf-8')
     LOG_FILE.write((str + '\n').encode('utf8'))
 
 

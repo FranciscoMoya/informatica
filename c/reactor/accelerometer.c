@@ -65,8 +65,9 @@ int accelerometer_setup()
 acceleration_value accelerometer_read(int fd)
 {
     acceleration_value a = {
-        (short) wiringPiI2CReadReg16(fd, DATAX)),
-        (short) wiringPiI2CReadReg16(fd, DATAY)),
-        (short) wiringPiI2CReadReg16(fd, DATAZ))
+        (short) wiringPiI2CReadReg16(fd, DATAX),
+        (short) wiringPiI2CReadReg16(fd, DATAY),
+        (short) wiringPiI2CReadReg16(fd, DATAZ)
     };
+    return a;
 }
