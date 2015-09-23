@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 """Simple grader application for Python programs
 
