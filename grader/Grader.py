@@ -4,6 +4,9 @@
 import gflags, httplib2, logging, os, sys, re, time, datetime, traceback
 import apiclient.discovery
 import oauth2client.file, oauth2client.client, oauth2client.tools
+import importlib
+from GraderReport import *
+import pylti.common as pylti
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -47,6 +50,59 @@ def download_folder(id, dest):
                "the application to re-authorize")
 
 
+def update_all_grades():
+    for dirpath, subdirs, files in os.walk(FLAGS.destination):
+        update_directory_grades(dirpath, files)
+
+
+def update_directory_grades(dirpath, files):
+    for f in files:
+        if not f.endswith('.log') and not f.endswith('.desc'):
+            update_file_grade(dirpath, f)
+
+
+def update_file_grade(dirpath, file):
+    # Get report, Find grade
+    # Find outcome url and sourcedid
+    consumers = {
+        "clave": {"secret": "shared"} # FIXME: Use config file
+    }
+
+    desc = open(os.path.join(dirpath, file + '.desc'), 'r')
+    sourcedid = desc.read()
+    desc.close()
+
+    dirdesc = open(os.path.join(dirpath, '.desc'), 'r')
+    url = dirdesc.read()
+    dirdesc.close()
+
+    reportpath = dirpath.replace(FLAGS.destination, FLAGS.reportdir, 1)
+    rpt = open(os.path.join(reportpath, file), 'r')
+    grade = rpt.readlines()[-1].split(': ')[-1][:-1]
+    rpt.close()
+
+    if not lti_post_grade(consumers, url, grade, sourcedid):
+        print 'Error posting grade %s to %s' % (grade, url)
+
+
+message_id = 1234
+
+def lti_post_grade(consumers, url, grade, lis_result_sourcedid):
+    print 'Posting %s to %s' % (grade, lis_result_sourcedid)
+    global message_id
+    message_identifier_id = str(message_id)
+    message_id +=1
+    operation = 'replaceResult'
+    score = float(grade)
+    if score < 0. or score > 1.0:
+        return False
+    xml = pylti.generate_request_xml(message_identifier_id,
+                                     operation,
+                                     lis_result_sourcedid,
+                                     score)
+    return pylti.post_message(consumers, 'clave', url, xml)
+
+
 def evaluate_all_assignments():
     for dirpath, subdirs, files in os.walk(FLAGS.destination):
         evaluate_directory(dirpath, files)
@@ -54,7 +110,7 @@ def evaluate_all_assignments():
 
 def evaluate_directory(dirpath, files):
     for f in files:
-        if not f.endswith('.log'):
+        if not f.endswith('.log') and not f.endswith('.desc'):
             evaluate_file(dirpath, f)
 
 
@@ -66,12 +122,32 @@ def evaluate_file(dirpath, filename):
 
 def run_tests(testdir, tests, submission):
     for t in tests:
-        run_single_test(os.path.join(testdir, t), submission)
+        if t.endswith('.py'):
+            run_single_test(os.path.join(testdir, t), submission)
 
 
 def run_single_test(test, submission):
     log('Running %s for %s' % (test, submission))
-    execfile(test)
+    sys.path.append(os.path.dirname(test))
+    mod, _ = os.path.splitext(os.path.basename(test))
+    tst = importlib.import_module(mod)
+    report = report_open(submission)
+    report.write('Calificación: %f\n' % eval_submission(submission, report, tst))
+    report.close()
+    sys.path.remove(os.path.dirname(test))
+
+
+def eval_submission(submission, report, tst):
+    try: os.remove('_sut.py')
+    except: pass
+    os.symlink(submission, '_sut.py')
+    try:
+        sut = importlib.import_module('_sut')
+        reload(sut)
+    except:
+        report_exception(report, submission, 'Sintaxis incorrecta')
+        return 0
+    return tst.test(submission, report, sut)
 
 
 def initialize_service():
@@ -97,8 +173,13 @@ def get_folder_contents(service, folder, base_path='./', depth=0):
     folder_contents = service.files().list(q="'%s' in parents" % folder['id']).execute()
     items = folder_contents['items']
     dest_path = os.path.join(base_path, folder['title'].replace('/', '_'))
-
     ensure_dir(dest_path)
+
+    if folder.has_key('description'):
+        desc = open(os.path.join(dest_path, '.desc'), 'w+')
+        desc.write(folder['description'])
+        desc.close()
+
     get_gdrive_files(service, items, dest_path, depth)
     get_gdrive_subfolders(service, items, dest_path, depth)
 
@@ -183,6 +264,10 @@ def save_gdrive_content_to_local(drive_file, content, dest_path):
     target.write(content)
     target.close()
     os.utime(file_location, (-1, get_gdrive_timestamp(drive_file)))
+    if drive_file.has_key('description'):
+        desc = open(file_location + '.desc', 'w+')
+        desc.write(drive_file['description'])
+        desc.close()
 
 
 def get_gdrive_timestamp(drive_file):

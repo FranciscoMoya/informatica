@@ -17,6 +17,7 @@ gflags.DEFINE_enum('logging_level', 'ERROR',
                    'Set the level of logging detail.')
 gflags.DEFINE_string('destination', 'downloaded', 'Destination folder location')
 gflags.DEFINE_string('testdir', 'tests', 'Directory where tests are located')
+gflags.DEFINE_string('reportdir', 'reports', 'Directory where evaluation reports will be stored')
 gflags.DEFINE_boolean('debug', False, 'Log folder contents as being fetched')
 gflags.DEFINE_string('logfile', 'drive.log', 'Location of file to write the log')
 gflags.DEFINE_string('download', None, 'Folder Id to be fetched (if any)')
