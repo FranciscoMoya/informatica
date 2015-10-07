@@ -3,4 +3,4 @@
 
 from campusvirtual import autenticar_campusvirtual
 
-print autenticar_campusvirtual(raw_input('Usuario'), raw_input('Password'))
+print autenticar_campusvirtual(raw_input('Usuario:'), raw_input('Password:'))

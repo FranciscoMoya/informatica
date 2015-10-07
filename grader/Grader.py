@@ -6,6 +6,7 @@ import apiclient.discovery
 import oauth2client.file, oauth2client.client, oauth2client.tools
 import importlib
 from GraderReport import *
+from campusvirtual import autenticar_campusvirtual
 import pylti.common as pylti
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
@@ -51,17 +52,18 @@ def download_folder(id, dest):
 
 
 def update_all_grades():
+    headers = autenticar_campusvirtual(FLAGS.user, FLAGS.password)
     for dirpath, subdirs, files in os.walk(FLAGS.destination):
-        update_directory_grades(dirpath, files)
+        update_directory_grades(dirpath, files, headers)
 
 
-def update_directory_grades(dirpath, files):
+def update_directory_grades(dirpath, files, headers):
     for f in files:
         if not f.endswith('.log') and not f.endswith('.desc'):
-            update_file_grade(dirpath, f)
+            update_file_grade(dirpath, f, headers)
 
 
-def update_file_grade(dirpath, file):
+def update_file_grade(dirpath, file, headers):
     # Get report, Find grade
     # Find outcome url and sourcedid
     consumers = {
@@ -81,13 +83,13 @@ def update_file_grade(dirpath, file):
     grade = rpt.readlines()[-1].split(': ')[-1][:-1]
     rpt.close()
 
-    if not lti_post_grade(consumers, url, grade, sourcedid):
+    if not lti_post_grade(consumers, url, grade, sourcedid, headers):
         print 'Error posting grade %s to %s' % (grade, url)
 
 
 message_id = 1234
 
-def lti_post_grade(consumers, url, grade, lis_result_sourcedid):
+def lti_post_grade(consumers, url, grade, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (grade, lis_result_sourcedid)
     global message_id
     message_identifier_id = str(message_id)
@@ -100,7 +102,7 @@ def lti_post_grade(consumers, url, grade, lis_result_sourcedid):
                                      operation,
                                      lis_result_sourcedid,
                                      score)
-    return pylti.post_message(consumers, 'clave', url, xml)
+    return pylti.post_message(consumers, 'clave', url, xml, headers)
 
 
 def evaluate_all_assignments():

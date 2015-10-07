@@ -9,6 +9,7 @@ available on https://github.com/vikynandha/google-drive-backup.git
 __author__ = 'fco.moya@gmail.com (Francisco Moya)'
 
 import gflags, sys, Grader
+import logging
 
 FLAGS = gflags.FLAGS
 
@@ -23,6 +24,8 @@ gflags.DEFINE_string('logfile', 'drive.log', 'Location of file to write the log'
 gflags.DEFINE_string('download', None, 'Folder Id to be fetched (if any)')
 gflags.DEFINE_boolean('eval', False, 'Evaluate assignments')
 gflags.DEFINE_boolean('grade', False, 'Send grades to LMS')
+gflags.DEFINE_string('user', '', 'UCLM User (required for grading)')
+gflags.DEFINE_string('password', '', 'UCLM Password (required for grading)')
 
 
 def main(argv):
@@ -33,6 +36,8 @@ def main(argv):
         sys.exit(1)
 
     Grader.initialize()
+    if FLAGS.debug:
+        logging.basicConfig(filename='grader.log',level=logging.DEBUG)
     if FLAGS.download:
         Grader.download_folder(FLAGS.download, FLAGS.destination)
     if FLAGS.eval:
