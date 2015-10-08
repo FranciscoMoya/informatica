@@ -4,10 +4,10 @@
 import gflags, httplib2, logging, os, sys, re, time, datetime, traceback
 import apiclient.discovery
 import oauth2client.file, oauth2client.client, oauth2client.tools
-import importlib
+import importlib, oauth2, httplib2
 from GraderReport import *
 from campusvirtual import autenticar_campusvirtual
-import pylti.common as pylti
+from xml.etree import ElementTree as etree
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -66,9 +66,6 @@ def update_directory_grades(dirpath, files, headers):
 def update_file_grade(dirpath, file, headers):
     # Get report, Find grade
     # Find outcome url and sourcedid
-    consumers = {
-        "clave": {"secret": "shared"} # FIXME: Use config file
-    }
 
     desc = open(os.path.join(dirpath, file + '.desc'), 'r')
     sourcedid = desc.read()
@@ -83,26 +80,88 @@ def update_file_grade(dirpath, file, headers):
     grade = rpt.readlines()[-1].split(': ')[-1][:-1]
     rpt.close()
 
-    if not lti_post_grade(consumers, url, grade, sourcedid, headers):
+    if not lti_post_grade(url, grade, sourcedid, headers):
         print 'Error posting grade %s to %s' % (grade, url)
 
 
 message_id = 1234
+http = httplib2.Http
+normalize = http._normalize_headers
 
-def lti_post_grade(consumers, url, grade, lis_result_sourcedid, headers):
+def my_normalize(self, headers):
+    ret = normalize(self, headers)
+    for i in ret:
+        ret[i[0].upper()+i[1:]] = ret.pop(i)
+    return ret
+
+http._normalize_headers = my_normalize
+
+
+def lti_post_grade(url, grade, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (grade, lis_result_sourcedid)
     global message_id
     message_identifier_id = str(message_id)
     message_id +=1
-    operation = 'replaceResult'
     score = float(grade)
     if score < 0. or score > 1.0:
         return False
-    xml = pylti.generate_request_xml(message_identifier_id,
-                                     operation,
-                                     lis_result_sourcedid,
-                                     score)
-    return pylti.post_message(consumers, 'clave', url, xml, headers)
+    xml = generate_request_xml(message_identifier_id,
+                               'replaceResult',
+                               lis_result_sourcedid,
+                               score)
+    headers['Content-Type'] = 'application/xml'
+    consumer = oauth2.Consumer(key="clave", secret="shared")
+    client = oauth2.Client(consumer)
+    resp, content = client.request(url, "POST",
+                                   body=xml, headers=headers)
+    print 'HEADERS:', headers
+    print 'BODY:', xml
+    print 'RESPONSE:', resp
+    print 'CONTENT:', content
+    return resp['status'] == '200'
+
+
+def generate_request_xml(message_identifier_id, operation,
+                         lis_result_sourcedid, score):
+    # pylint: disable=too-many-locals
+    """
+    Generates LTI 1.1 XML for posting result to LTI consumer.
+
+    :param message_identifier_id:
+    :param operation:
+    :param lis_result_sourcedid:
+    :param score:
+    :return: XML string
+    """
+    root = etree.Element(u'imsx_POXEnvelopeRequest',
+                         xmlns=u'http://www.imsglobal.org/services/'
+                               u'ltiv1p1/xsd/imsoms_v1p0')
+
+    header = etree.SubElement(root, 'imsx_POXHeader')
+    header_info = etree.SubElement(header, 'imsx_POXRequestHeaderInfo')
+    version = etree.SubElement(header_info, 'imsx_version')
+    version.text = 'V1.0'
+    message_identifier = etree.SubElement(header_info,
+                                          'imsx_messageIdentifier')
+    message_identifier.text = message_identifier_id
+    body = etree.SubElement(root, 'imsx_POXBody')
+    xml_request = etree.SubElement(body, '%s%s' % (operation, 'Request'))
+    record = etree.SubElement(xml_request, 'resultRecord')
+
+    guid = etree.SubElement(record, 'sourcedGUID')
+
+    sourcedid = etree.SubElement(guid, 'sourcedId')
+    sourcedid.text = lis_result_sourcedid
+    if score is not None:
+        result = etree.SubElement(record, 'result')
+        result_score = etree.SubElement(result, 'resultScore')
+        language = etree.SubElement(result_score, 'language')
+        language.text = 'en'
+        text_string = etree.SubElement(result_score, 'textString')
+        text_string.text = score.__str__()
+    ret = "<?xml version='1.0' encoding='utf-8'?>\n{}".format(
+        etree.tostring(root, encoding='utf-8'))
+    return ret
 
 
 def evaluate_all_assignments():

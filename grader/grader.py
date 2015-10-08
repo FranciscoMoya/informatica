@@ -9,7 +9,7 @@ available on https://github.com/vikynandha/google-drive-backup.git
 __author__ = 'fco.moya@gmail.com (Francisco Moya)'
 
 import gflags, sys, Grader
-import logging
+import logging, httplib2
 
 FLAGS = gflags.FLAGS
 
@@ -38,6 +38,7 @@ def main(argv):
     Grader.initialize()
     if FLAGS.debug:
         logging.basicConfig(filename='grader.log',level=logging.DEBUG)
+        httplib2.debuglevel=4
     if FLAGS.download:
         Grader.download_folder(FLAGS.download, FLAGS.destination)
     if FLAGS.eval:
