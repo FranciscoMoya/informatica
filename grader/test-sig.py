@@ -44,28 +44,24 @@ auth='''OAuth realm="https://campusvirtual.uclm.es",
  oauth_signature_method="HMAC-SHA1",
  oauth_version="1.0"'''
 
+def percent_encode(str):
+    return urllib.quote(str,safe='')
+
 p = sorteddict()
 pu = sorteddict()
 for i in auth.split(',\n ')[1:]:
     k,v = i.split('=')
-    p[k] = v[1:-1]
-    pu[k] = urllib.unquote(v[1:-1])
+    pu[percent_encode(k)] = percent_encode(urllib.unquote_plus(v[1:-1]))
 
-params='&'.join(['='.join((k,p[k])) for k in p])
 params2='&'.join(['='.join((k,pu[k])) for k in pu])
-base = '&'.join(map(urllib.quote_plus,
-                    ['POST',
-                     'https://campusvirtual.uclm.es/mod/lti/service.php',
-                     params]))
-base2 = '&'.join(map(urllib.quote_plus,
+base2 = '&'.join(map(percent_encode,
                      ['POST',
                       'https://campusvirtual.uclm.es/mod/lti/service.php',
                       params2]))
 key='shared&'
 
-print 'SIG:  ', urllib.unquote(oauth_signature)
-print 'CALC: ', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
-print 'CALC2:', base64.b64encode(hmac.new(key,base2,hashlib.sha1).digest())
+print 'SIG: ', urllib.unquote(oauth_signature)
+print 'CALC:', base64.b64encode(hmac.new(key,base2,hashlib.sha1).digest())
 
 '''Caso de ejemplo de la RFC5849. Para comprobar el método de cálculo
 de la firma voy a aplicarlo al ejemplo de referencia.'''
@@ -73,7 +69,10 @@ de la firma voy a aplicarlo al ejemplo de referencia.'''
 base='GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_consumer_key%3Ddpf43f3p2l4k3l03%26oauth_nonce%3Dkllo9940pd9333jh%26oauth_signature_method%3DHMAC-SHA1%26oauth_timestamp%3D1191242096%26oauth_token%3Dnnch734d00sl2jdk%26oauth_version%3D1.0%26size%3Doriginal'
 key='kd94hf93k423kf44&pfkkdhi9sl3r4s00'
 
-print 'Ref SIG:', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+refsig='tR3+Ty81lMeYAr/Fid0kMTYa/WM='
+
+print 'Ref  SIG:', refsig
+print 'Calc SIG:', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
 
 
 '''Prueba de firma en el launch de Moodle'''
@@ -89,31 +88,17 @@ for i in params.split('&'):
     if k == 'oauth_signature':
         oauth_signature = v
         continue
-    p[k] = v
-    pu[urllib.unquote(k)] = urllib.unquote(v)
-    pq[urllib.quote_plus(urllib.unquote(k))] = urllib.quote_plus(urllib.unquote(v))
+    pq[percent_encode(urllib.unquote(k))] = percent_encode(urllib.unquote_plus(v))
 
-params='&'.join(['='.join((k,p[k])) for k in p])
-params2='&'.join(['='.join((k,pu[k])) for k in pu])
 params3='&'.join(['='.join((k,pq[k])) for k in pq])
-base = '&'.join(map(urllib.quote_plus,
-                    ['POST',
-                     'http://161.67.172.69:8088/prueba/lms',
-                     params]))
-base2 = '&'.join(map(urllib.quote_plus,
-                     ['POST',
-                      'http://161.67.172.69:8088/prueba/lms',
-                      params2]))
-base3 = '&'.join(map(urllib.quote_plus,
+base3 = '&'.join(map(percent_encode,
                      ['POST',
                       'http://161.67.172.69:8088/prueba/lms',
                       params3]))
 key='shared&'
 
 print 'From Campus Virtual:'
-print 'SIG:  ', urllib.unquote(oauth_signature)
-print 'CALC: ', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
-print 'CALC2:', base64.b64encode(hmac.new(key,base2,hashlib.sha1).digest())
-print 'CALC3:', base64.b64encode(hmac.new(key,base3,hashlib.sha1).digest())
+print 'SIG: ', urllib.unquote(oauth_signature)
+print 'CALC:', base64.b64encode(hmac.new(key,base3,hashlib.sha1).digest())
 
 '''Comprobar que generamos la misma cadena de parametros a partir del diccionario'''
