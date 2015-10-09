@@ -45,19 +45,27 @@ auth='''OAuth realm="https://campusvirtual.uclm.es",
  oauth_version="1.0"'''
 
 p = sorteddict()
+pu = sorteddict()
 for i in auth.split(',\n ')[1:]:
     k,v = i.split('=')
     p[k] = v[1:-1]
+    pu[k] = urllib.unquote(v[1:-1])
 
 params='&'.join(['='.join((k,p[k])) for k in p])
+params2='&'.join(['='.join((k,pu[k])) for k in pu])
 base = '&'.join(map(urllib.quote_plus,
                     ['POST',
                      'https://campusvirtual.uclm.es/mod/lti/service.php',
                      params]))
+base2 = '&'.join(map(urllib.quote_plus,
+                     ['POST',
+                      'https://campusvirtual.uclm.es/mod/lti/service.php',
+                      params2]))
 key='shared&'
 
-print 'SIG :', urllib.unquote(oauth_signature)
-print 'CALC:', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+print 'SIG:  ', urllib.unquote(oauth_signature)
+print 'CALC: ', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+print 'CALC2:', base64.b64encode(hmac.new(key,base2,hashlib.sha1).digest())
 
 '''Caso de ejemplo de la RFC5849. Para comprobar el método de cálculo
 de la firma voy a aplicarlo al ejemplo de referencia.'''
@@ -66,3 +74,46 @@ base='GET&http%3A%2F%2Fphotos.example.net%2Fphotos&file%3Dvacation.jpg%26oauth_c
 key='kd94hf93k423kf44&pfkkdhi9sl3r4s00'
 
 print 'Ref SIG:', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+
+
+'''Prueba de firma en el launch de Moodle'''
+
+params='''oauth_version=1.0&oauth_nonce=44e4c87b32e9bf82679dc7383d29d01d&oauth_timestamp=1444319156&oauth_consumer_key=clave%2Fe%C3%B1e&resource_link_id=47&resource_link_title=Prueba+de+launch&resource_link_description=solo+prueba&user_id=34094&roles=Instructor&context_id=12080&context_label=%2812080%29+INFORM%C3%81TICA&context_title=INFORM%C3%81TICA&launch_presentation_locale=es&lis_result_sourcedid=%7B%22data%22%3A%7B%22instanceid%22%3A%2247%22%2C%22userid%22%3A%2234094%22%2C%22launchid%22%3A988482759%7D%2C%22hash%22%3A%22c4d108af94b41b54dc2d2166e573d0496937d11c8445319b4b8ce87003858b36%22%7D&lis_outcome_service_url=https%3A%2F%2Fcampusvirtual.uclm.es%2Fmod%2Flti%2Fservice.php&lis_person_name_given=FRANCISCO&lis_person_name_family=MOYA+FERNANDEZ&lis_person_name_full=FRANCISCO+MOYA+FERNANDEZ&lis_person_contact_email_primary=francisco.moya%40uclm.es&ext_lms=moodle-2&tool_consumer_info_product_family_code=moodle&tool_consumer_info_version=2014051205.01&oauth_callback=about%3Ablank&lti_version=LTI-1p0&lti_message_type=basic-lti-launch-request&tool_consumer_instance_guid=campusvirtual.uclm.es&launch_presentation_return_url=https%3A%2F%2Fcampusvirtual.uclm.es%2Fmod%2Flti%2Freturn.php%3Fcourse%3D12080%26launch_container%3D4%26instanceid%3D47%26sesskey%3DVZoDQsx6RK&oauth_signature_method=HMAC-SHA1&oauth_signature=Gxj4zdtADrly36D1OiOJN5x5Wp4%3D&ext_submit=Press+to+launch+this+activity'''
+
+oauth_signature=None
+p = sorteddict()
+pu = sorteddict()
+pq = sorteddict()
+for i in params.split('&'):
+    k,v = i.split('=')
+    if k == 'oauth_signature':
+        oauth_signature = v
+        continue
+    p[k] = v
+    pu[urllib.unquote(k)] = urllib.unquote(v)
+    pq[urllib.quote_plus(urllib.unquote(k))] = urllib.quote_plus(urllib.unquote(v))
+
+params='&'.join(['='.join((k,p[k])) for k in p])
+params2='&'.join(['='.join((k,pu[k])) for k in pu])
+params3='&'.join(['='.join((k,pq[k])) for k in pq])
+base = '&'.join(map(urllib.quote_plus,
+                    ['POST',
+                     'http://161.67.172.69:8088/prueba/lms',
+                     params]))
+base2 = '&'.join(map(urllib.quote_plus,
+                     ['POST',
+                      'http://161.67.172.69:8088/prueba/lms',
+                      params2]))
+base3 = '&'.join(map(urllib.quote_plus,
+                     ['POST',
+                      'http://161.67.172.69:8088/prueba/lms',
+                      params3]))
+key='shared&'
+
+print 'From Campus Virtual:'
+print 'SIG:  ', urllib.unquote(oauth_signature)
+print 'CALC: ', base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+print 'CALC2:', base64.b64encode(hmac.new(key,base2,hashlib.sha1).digest())
+print 'CALC3:', base64.b64encode(hmac.new(key,base3,hashlib.sha1).digest())
+
+'''Comprobar que generamos la misma cadena de parametros a partir del diccionario'''
