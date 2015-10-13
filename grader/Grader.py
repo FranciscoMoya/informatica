@@ -8,6 +8,8 @@ import importlib, oauth2, httplib2
 from GraderReport import *
 from campusvirtual import autenticar_campusvirtual
 from xml.etree import ElementTree as etree
+import hashlib, base64, urllib, hmac
+from blist import sorteddict
 
 # CLIENT_SECRETS, name of a file containing the OAuth 2.0 information for this
 # application, including client_id and client_secret, which are found
@@ -91,11 +93,11 @@ normalize = http._normalize_headers
 def my_normalize(self, headers):
     ret = normalize(self, headers)
     for i in ret:
-        ret[i[0].upper()+i[1:]] = ret.pop(i)
+        key = i[0].upper()+i[1:]
+        ret[key] = ret.pop(i)
     return ret
 
 http._normalize_headers = my_normalize
-
 
 def lti_post_grade(url, grade, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (grade, lis_result_sourcedid)

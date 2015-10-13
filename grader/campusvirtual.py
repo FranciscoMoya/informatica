@@ -3,6 +3,33 @@
 
 import httplib2, urllib
 from BeautifulSoup import BeautifulSoup
+import hashlib, base64, hmac
+from blist import sorteddict
+
+def edit_grades(course, headers):
+    url='https://campusvirtual.uclm.es/grade/report/grader/index.php'
+
+    h = httplib2.Http(".cache")
+    #h.follow_redirects = False
+
+    resp, content = rq(h, url + '?id=%s&' % (course), "GET", headers=headers)
+
+    # Activar edición
+    p = BeautifulSoup(content)
+    f = p.find('form')
+    action = f.get('action')
+    params = {}
+    for i in f('input'):
+        if i.get('type') == 'hidden':
+            params[i.get('name')] = i.get('value')
+
+    body = urllib.urlencode(params)
+
+    resp, content = rq(h, url, "POST", headers=headers, body=body)
+
+    print resp
+    print content
+
 
 def autenticar_campusvirtual(user, password):
     '''
@@ -146,3 +173,37 @@ def append_cookie(headers, resp):
     else:
         headers['Cookie'] += '; ' + get_cookie(resp)
     headers['Cookie'] = normalize_cookie(headers['Cookie'])
+
+
+
+def oauth_signature(method, url, params, key):
+    base = oauth_base_string(method, url, params)
+    return base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
+
+def oauth_base_string(method, url, params):
+    params='&'.join(['='.join((k,params[k])) for k in params])
+    return '&'.join(map(percent_encode, [method, url, params]))
+
+def params_from_authorization(auth):
+    p = sorteddict()
+    for i in auth.split(',')[1:]:
+        k,v = i.strip().split('=')
+        if k == 'oauth_signature':
+            oauth_signature = urllib.unquote(v[1:-1])
+            continue
+        p[percent_encode(k)] = percent_encode(urllib.unquote(v[1:-1]))
+    return p, oauth_signature
+
+
+def params_from_postdata(data):
+    p = sorteddict()
+    for i in data.split('&'):
+        k,v = i.strip().split('=')
+        if k == 'oauth_signature':
+            oauth_signature = urllib.unquote(v)
+            continue
+        p[percent_encode(k)] = percent_encode(urllib.unquote_plus(v))
+    return p, oauth_signature
+
+def percent_encode(str):
+    return urllib.quote(str,safe='')
