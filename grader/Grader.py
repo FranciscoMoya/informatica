@@ -350,3 +350,7 @@ def is_file_modified(drive_file, local_file):
         return rtime > ltime
     else:
         return True
+
+
+def update_all_reports():
+    pass

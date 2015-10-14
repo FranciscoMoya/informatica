@@ -22,6 +22,7 @@ gflags.DEFINE_string('reportdir', 'reports', 'Directory where evaluation reports
 gflags.DEFINE_boolean('debug', False, 'Log folder contents as being fetched')
 gflags.DEFINE_string('logfile', 'drive.log', 'Location of file to write the log')
 gflags.DEFINE_string('download', None, 'Folder Id to be fetched (if any)')
+gflags.DEFINE_boolean('upload', False, 'Upload reports to GDrive')
 gflags.DEFINE_boolean('eval', False, 'Evaluate assignments')
 gflags.DEFINE_boolean('grade', False, 'Send grades to LMS')
 gflags.DEFINE_string('user', '', 'UCLM User (required for grading)')
@@ -45,6 +46,8 @@ def main(argv):
         Grader.evaluate_all_assignments()
     if FLAGS.grade:
         Grader.update_all_grades()
+    if FLAGS.upload:
+        Grader.update_all_reports()
 
 if __name__ == '__main__':
     main(sys.argv)
