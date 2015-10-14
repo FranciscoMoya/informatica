@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8; mode: python -*-
 """Simple grader application for Python programs
 
 Heavily based on drive.py application by Vignesh Nandha Kumar,

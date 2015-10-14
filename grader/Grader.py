@@ -124,9 +124,9 @@ def generate_request_xml(message_identifier_id, operation,
     :param score:
     :return: XML string
     """
-    root = etree.Element(u'imsx_POXEnvelopeRequest',
-                         xmlns=u'http://www.imsglobal.org/services/'
-                               u'ltiv1p1/xsd/imsoms_v1p0')
+    root = etree.Element('imsx_POXEnvelopeRequest',
+                         xmlns='http://www.imsglobal.org/services/'
+                               'ltiv1p1/xsd/imsoms_v1p0')
 
     header = etree.SubElement(root, 'imsx_POXHeader')
     header_info = etree.SubElement(header, 'imsx_POXRequestHeaderInfo')
@@ -356,7 +356,6 @@ def upload_all_reports():
     try:
         service = initialize_service()
         folder = ensure_remote_folder(service, 'StudentReports')
-        print 'Uploading reports to', folder['title']
         for dirpath, subdirs, files in os.walk(FLAGS.reportdir):
             upload_directory_reports(service, folder, dirpath, files)
     except oauth2client.client.AccessTokenRefreshError:
@@ -365,30 +364,37 @@ def upload_all_reports():
 
 
 def upload_directory_reports(service, folder, dirpath, files):
-    # Ensure StudentReports/dirpath
-    print 'Directory', '/StudentReports' + dirpath[len(FLAGS.reportdir):]
     folder = ensure_remote_folder(service, '/StudentReports' + dirpath[7:])
     for f in files:
         if not f.endswith('.log') and not f.endswith('.desc'):
-            upload_file_report(dirpath, f)
+            upload_file_report(service, folder, dirpath, f)
 
 
-def upload_file_report(dirpath, file):
-    reportpath = dirpath.replace(FLAGS.destination, FLAGS.reportdir, 1)
-    rpt = open(os.path.join(reportpath, file), 'r')
-    data = rpt.read()
-    rpt.close()
-    print 'File', '/StudentReports' + os.path.join(reportpath, file)[len(FLAGS.reportdir):]
+def upload_file_report(service, folder, dirpath, fname):
+    print 'Report', os.path.join(dirpath, fname)
+    return service.files().insert(
+        media_body = os.path.join(dirpath, fname),
+        body = {
+            'mimeType':'text/plain',
+            'parents':[ { 'id': folder['id'] } ],
+            'title':fname }).execute()
 
 
 def ensure_remote_folder(service, path):
     parent='root'
     for f in path.split(os.path.sep):
         if not f: continue
-        result = service.files().list(q="title='%s' and '%s' in parents" % (f,parent)).execute()
-        folder = result['items'][0] if folders.has_key('items') else create_remote_folder(service, f, parent)
-        parent=folder['id']
+        q="title='%s' and '%s' in parents" % (f, str(parent))
+        result = service.files().list(q=q).execute()
+        if result.has_key('items') and result['items']:
+            folder = result['items'][0]
+        else:
+            folder = create_remote_folder(service, f, parent)
+        parent = folder['id']
     return folder
 
 def create_remote_folder(service, fname, parent):
-    pass
+    return service.files().insert(body={
+        'mimeType':'application/vnd.google-apps.folder',
+        'parents': [ { 'id':str(parent) } ],
+        'title': fname }).execute()

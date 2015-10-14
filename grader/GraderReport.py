@@ -28,4 +28,4 @@ def report_open(fname):
         os.makedirs(os.path.dirname(reportpath))
     except:
         pass
-    return open(reportpath, 'w')
+    return open(reportpath, 'wb')
