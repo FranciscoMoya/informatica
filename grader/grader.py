@@ -47,7 +47,7 @@ def main(argv):
     if FLAGS.grade:
         Grader.update_all_grades()
     if FLAGS.upload:
-        Grader.update_all_reports()
+        Grader.upload_all_reports()
 
 if __name__ == '__main__':
     main(sys.argv)

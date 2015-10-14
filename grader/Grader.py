@@ -42,17 +42,6 @@ def initialize():
     logging.getLogger().setLevel(getattr(logging, FLAGS.logging_level))
 
 
-def download_folder(id, dest):
-    try:
-        service = initialize_service()
-        folder = service.files().get(fileId = id).execute()
-        print 'Downloading drive folder', folder['title']
-        get_folder_contents(service, folder, dest)
-    except oauth2client.client.AccessTokenRefreshError:
-        print ("The credentials have been revoked or expired, please re-run"
-               "the application to re-authorize")
-
-
 def update_all_grades():
     headers = autenticar_campusvirtual(FLAGS.user, FLAGS.password)
     for dirpath, subdirs, files in os.walk(FLAGS.destination):
@@ -213,6 +202,17 @@ def eval_submission(submission, report, tst):
     return tst.test(submission, report, sut)
 
 
+def download_folder(id, dest):
+    try:
+        service = initialize_service()
+        folder = service.files().get(fileId = id).execute()
+        print 'Downloading drive folder', folder['title']
+        get_folder_contents(service, folder, dest)
+    except oauth2client.client.AccessTokenRefreshError:
+        print ("The credentials have been revoked or expired, please re-run"
+               "the application to re-authorize")
+
+
 def initialize_service():
     storage = oauth2client.file.Storage('drive.dat')
     credentials = storage.get()
@@ -352,5 +352,43 @@ def is_file_modified(drive_file, local_file):
         return True
 
 
-def update_all_reports():
+def upload_all_reports():
+    try:
+        service = initialize_service()
+        folder = ensure_remote_folder(service, 'StudentReports')
+        print 'Uploading reports to', folder['title']
+        for dirpath, subdirs, files in os.walk(FLAGS.reportdir):
+            upload_directory_reports(service, folder, dirpath, files)
+    except oauth2client.client.AccessTokenRefreshError:
+        print ("The credentials have been revoked or expired, please re-run"
+               "the application to re-authorize")
+
+
+def upload_directory_reports(service, folder, dirpath, files):
+    # Ensure StudentReports/dirpath
+    print 'Directory', '/StudentReports' + dirpath[len(FLAGS.reportdir):]
+    folder = ensure_remote_folder(service, '/StudentReports' + dirpath[7:])
+    for f in files:
+        if not f.endswith('.log') and not f.endswith('.desc'):
+            upload_file_report(dirpath, f)
+
+
+def upload_file_report(dirpath, file):
+    reportpath = dirpath.replace(FLAGS.destination, FLAGS.reportdir, 1)
+    rpt = open(os.path.join(reportpath, file), 'r')
+    data = rpt.read()
+    rpt.close()
+    print 'File', '/StudentReports' + os.path.join(reportpath, file)[len(FLAGS.reportdir):]
+
+
+def ensure_remote_folder(service, path):
+    parent='root'
+    for f in path.split(os.path.sep):
+        if not f: continue
+        result = service.files().list(q="title='%s' and '%s' in parents" % (f,parent)).execute()
+        folder = result['items'][0] if folders.has_key('items') else create_remote_folder(service, f, parent)
+        parent=folder['id']
+    return folder
+
+def create_remote_folder(service, fname, parent):
     pass
