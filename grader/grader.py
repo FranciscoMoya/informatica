@@ -21,7 +21,7 @@ gflags.DEFINE_string('testdir', 'tests', 'Directory where tests are located')
 gflags.DEFINE_string('reportdir', 'reports', 'Directory where evaluation reports will be stored')
 gflags.DEFINE_boolean('debug', False, 'Log folder contents as being fetched')
 gflags.DEFINE_string('logfile', 'drive.log', 'Location of file to write the log')
-gflags.DEFINE_string('download', None, 'Folder Id to be fetched (if any)')
+gflags.DEFINE_boolean('download', False, 'Folder Id to be fetched (if any)')
 gflags.DEFINE_boolean('upload', False, 'Upload reports to GDrive')
 gflags.DEFINE_boolean('eval', False, 'Evaluate assignments')
 gflags.DEFINE_boolean('grade', False, 'Send grades to LMS')
@@ -41,13 +41,13 @@ def main(argv):
         logging.basicConfig(filename='grader.log',level=logging.DEBUG)
         httplib2.debuglevel=4
     if FLAGS.download:
-        Grader.download_folder(FLAGS.download, FLAGS.destination)
+        Grader.download_folders(FLAGS.destination)
     if FLAGS.eval:
         Grader.evaluate_all_assignments()
-    if FLAGS.grade:
-        Grader.update_all_grades()
     if FLAGS.upload:
         Grader.upload_all_reports()
+    if FLAGS.grade:
+        Grader.update_all_grades()
 
 if __name__ == '__main__':
     main(sys.argv)

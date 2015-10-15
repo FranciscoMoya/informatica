@@ -167,9 +167,16 @@ def evaluate_directory(dirpath, files):
 
 
 def evaluate_file(dirpath, filename):
+    f = os.path.join(dirpath, filename)
+    report = FLAGS.reportdir + f[len(FLAGS.destination):]
+    if os.path.exists(report):
+        ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(f))
+        rtime = datetime.datetime.utcfromtimestamp(os.path.getmtime(report))
+        if rtime > ltime:
+            return
     testpath = dirpath.replace(FLAGS.destination, FLAGS.testdir, 1)
     for dp, sd, tests in os.walk(testpath):
-        run_tests(dp, tests, os.path.join(dirpath, filename))
+        run_tests(dp, tests, f)
 
 
 def run_tests(testdir, tests, submission):
@@ -202,15 +209,22 @@ def eval_submission(submission, report, tst):
     return tst.test(submission, report, sut)
 
 
-def download_folder(id, dest):
+def download_folders(dest):
     try:
         service = initialize_service()
-        folder = service.files().get(fileId = id).execute()
-        print 'Downloading drive folder', folder['title']
-        get_folder_contents(service, folder, dest)
+        contents = service.files().list(q="title='StudentFiles'").execute()
+        contents = service.files().list(q="'%s' in parents" % contents['items'][0]['id']).execute()
+        for f in contents['items']:
+            download_folder(service, f['id'], dest)
     except oauth2client.client.AccessTokenRefreshError:
         print ("The credentials have been revoked or expired, please re-run"
                "the application to re-authorize")
+
+
+def download_folder(service, id, dest):
+    folder = service.files().get(fileId = id).execute()
+    print 'Downloading drive folder', folder['title']
+    get_folder_contents(service, folder, dest)
 
 
 def initialize_service():
@@ -262,7 +276,7 @@ def get_gdrive_files(service, items, dest_path, depth):
             log('  ' * depth + "-- " + item['title'])
 
         full_path = os.path.join(dest_path, item['title'].replace('/', '_'))
-        if not is_file_modified(item, full_path):
+        if not is_drive_file_modified(item, full_path):
             continue
 
         is_file_new = not os.path.exists(full_path)
@@ -343,13 +357,18 @@ def is_google_doc (drive_file):
     return True if re.match('^application/vnd\.google-apps\..+', drive_file['mimeType']) else False
 
 
-def is_file_modified(drive_file, local_file):
-    if os.path.exists(local_file):
-        rtime = datetime.datetime.strptime(drive_file['modifiedDate'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(local_file))
-        return rtime > ltime
-    else:
+def is_drive_file_modified(drive_file, local_file):
+    if not os.path.exists(local_file):
         return True
+    rtime = datetime.datetime.strptime(drive_file['modifiedDate'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(local_file))
+    return rtime > ltime
+
+
+def is_local_file_modified(drive_file, local_file):
+    rtime = datetime.datetime.strptime(drive_file['modifiedDate'], '%Y-%m-%dT%H:%M:%S.%fZ')
+    ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(local_file))
+    return rtime < ltime
 
 
 def upload_all_reports():
@@ -371,13 +390,39 @@ def upload_directory_reports(service, folder, dirpath, files):
 
 
 def upload_file_report(service, folder, dirpath, fname):
-    print 'Report', os.path.join(dirpath, fname)
-    return service.files().insert(
-        media_body = os.path.join(dirpath, fname),
-        body = {
-            'mimeType':'text/plain',
-            'parents':[ { 'id': folder['id'] } ],
-            'title':fname }).execute()
+    # Solo enviar si es más nuevo
+    report = os.path.join(dirpath, fname)
+    update_or_insert_report(service, folder['id'], fname, report)
+
+
+def update_or_insert_report(service, parent, fname, report):
+    # Busca fname en folder
+    q="title='%s' and '%s' in parents" % (fname, str(parent))
+    result = service.files().list(q=q).execute()
+    if result.has_key('items') and result['items']:
+        gfile = result['items'][0]
+        if not is_local_file_modified(gfile, report):
+            return
+        print 'Update', report
+        time.sleep(.4)
+        service.files().update(
+            fileId = gfile['id'],
+            media_body = report,
+            body = {
+                'mimeType': 'text/plain',
+                'setModifiedDate': 'true',
+                'modifiedDate': rfc3339_date_of(report),
+                'parents':[ { 'id': parent } ] }).execute()
+    else:
+        print 'Insert', report
+        time.sleep(.4)
+        service.files().insert(
+            media_body = report,
+            body = {
+                'mimeType':'text/plain',
+                'modifiedDate': rfc3339_date_of(report),
+                'parents':[ { 'id': parent } ],
+                'title':fname }).execute()
 
 
 def ensure_remote_folder(service, path):
@@ -398,3 +443,7 @@ def create_remote_folder(service, fname, parent):
         'mimeType':'application/vnd.google-apps.folder',
         'parents': [ { 'id':str(parent) } ],
         'title': fname }).execute()
+
+def rfc3339_date_of(path):
+    ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(path))
+    return ltime.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
