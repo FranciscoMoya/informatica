@@ -168,6 +168,9 @@ def get_cookie(resp):
 
 
 def append_cookie(headers, resp):
+    if not 'set-cookie' in resp:
+        print 'WARNING! No cookie in resp:'
+        return
     if not 'Cookie' in headers:
         headers['Cookie'] = get_cookie(resp)
     else:

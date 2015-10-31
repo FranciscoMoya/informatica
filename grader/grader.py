@@ -16,18 +16,18 @@ FLAGS = gflags.FLAGS
 gflags.DEFINE_enum('logging_level', 'ERROR',
                    ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'],
                    'Set the level of logging detail.')
-gflags.DEFINE_string('destination', 'downloaded', 'Destination folder location')
+gflags.DEFINE_string('remote', 'StudentFiles', 'Remote folder location')
+gflags.DEFINE_string('local', 'downloaded', 'Local folder location')
 gflags.DEFINE_string('testdir', 'tests', 'Directory where tests are located')
 gflags.DEFINE_string('reportdir', 'reports', 'Directory where evaluation reports will be stored')
 gflags.DEFINE_boolean('debug', False, 'Log folder contents as being fetched')
 gflags.DEFINE_string('logfile', 'drive.log', 'Location of file to write the log')
-gflags.DEFINE_boolean('download', False, 'Folder Id to be fetched (if any)')
+gflags.DEFINE_boolean('download', False, 'Download StudentFiles folder')
 gflags.DEFINE_boolean('upload', False, 'Upload reports to GDrive')
 gflags.DEFINE_boolean('eval', False, 'Evaluate assignments')
 gflags.DEFINE_boolean('grade', False, 'Send grades to LMS')
 gflags.DEFINE_string('user', '', 'UCLM User (required for grading)')
 gflags.DEFINE_string('password', '', 'UCLM Password (required for grading)')
-
 
 def main(argv):
     try:
@@ -41,10 +41,13 @@ def main(argv):
         logging.basicConfig(filename='grader.log',level=logging.DEBUG)
         httplib2.debuglevel=4
     if FLAGS.download:
-        Grader.download_folders(FLAGS.destination)
+        Grader.download_folders(FLAGS.remote, FLAGS.local)
     if FLAGS.eval:
         Grader.evaluate_all_assignments()
     if FLAGS.upload:
+        # Correct default remote path
+        if FLAGS.remote == 'StudentFiles':
+            FLAGS.remote = 'StudentReports'
         Grader.upload_all_reports()
     if FLAGS.grade:
         Grader.update_all_grades()

@@ -34,9 +34,10 @@ with information from the APIs Console <https://code.google.com/apis/console>.
 FLAGS = gflags.FLAGS
 
 def initialize():
+    print 'Initializing'
     if not re.match('^/', FLAGS.logfile):
-        ensure_dir(FLAGS.destination)
-        FLAGS.logfile = os.path.join(FLAGS.destination, FLAGS.logfile)
+        ensure_dir(FLAGS.local, silent=True)
+        FLAGS.logfile = os.path.join(FLAGS.local, FLAGS.logfile)
     global LOG_FILE
     LOG_FILE = open(FLAGS.logfile, 'w+')
     logging.getLogger().setLevel(getattr(logging, FLAGS.logging_level))
@@ -44,7 +45,7 @@ def initialize():
 
 def update_all_grades():
     headers = autenticar_campusvirtual(FLAGS.user, FLAGS.password)
-    for dirpath, subdirs, files in os.walk(FLAGS.destination):
+    for dirpath, subdirs, files in os.walk(FLAGS.local):
         update_directory_grades(dirpath, files, headers)
 
 
@@ -66,7 +67,7 @@ def update_file_grade(dirpath, file, headers):
     url = dirdesc.read()
     dirdesc.close()
 
-    reportpath = dirpath.replace(FLAGS.destination, FLAGS.reportdir, 1)
+    reportpath = dirpath.replace(FLAGS.local, FLAGS.reportdir, 1)
     rpt = open(os.path.join(reportpath, file), 'r')
     grade = rpt.readlines()[-1].split(': ')[-1][:-1]
     rpt.close()
@@ -88,6 +89,39 @@ def my_normalize(self, headers):
 
 http._normalize_headers = my_normalize
 
+campusvirtual_hostnames = [ 'fmoodle2%d'%i for i in range(1,7) ]
+
+class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
+    def signing_base(self, request, consumer, token):
+        if not hasattr(request, 'normalized_url') or request.normalized_url is None:
+            raise ValueError("Base URL for request is not set.")
+
+        url = request.normalized_url
+        url = url.replace('https', 'http')
+        print 'Signing %s request with url %s' % (request.method, url)
+
+        sig = (
+            oauth2.escape(request.method),
+            oauth2.escape(url),
+            oauth2.escape(request.get_normalized_parameters()),
+        )
+
+        key = '%s&' % oauth2.escape(consumer.secret)
+        if token:
+            key += oauth2.escape(token.secret)
+        raw = '&'.join(sig)
+        return key, raw
+
+    current_host = 0
+
+    def get_hostname(self):
+        return campusvirtual_hostnames[self.current_host]
+
+    def next_hostname(self):
+        self.current_host += 1
+        self.current_host %= len(campusvirtual_hostnames)
+
+
 def lti_post_grade(url, grade, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (grade, lis_result_sourcedid)
     global message_id
@@ -103,13 +137,24 @@ def lti_post_grade(url, grade, lis_result_sourcedid, headers):
     headers['Content-Type'] = 'application/xml'
     consumer = oauth2.Consumer(key="clave", secret="shared")
     client = oauth2.Client(consumer)
-    resp, content = client.request(url, "POST",
-                                   body=xml, headers=headers)
-    print 'HEADERS:', headers
-    print 'BODY:', xml
-    print 'RESPONSE:', resp
-    print 'CONTENT:', content
-    return resp['status'] == '200'
+    client.set_signature_method(SignatureMethod_CampusVirtual())
+
+    for i in range(6):
+        resp, content = client.request(url,
+                                       'POST',
+                                       body=xml, headers=headers)
+        if resp['status'] == '200':
+            print 'Success!', client.method.current_host
+            return True
+
+        print 'Failed with status', resp['status']
+        #print content
+        client.method.next_hostname()
+    # print 'HEADERS:', headers
+    # print 'BODY:', xml
+    # print 'RESPONSE:', resp
+    # print 'CONTENT:', content
+    return False
 
 
 def generate_request_xml(message_identifier_id, operation,
@@ -156,7 +201,7 @@ def generate_request_xml(message_identifier_id, operation,
 
 
 def evaluate_all_assignments():
-    for dirpath, subdirs, files in os.walk(FLAGS.destination):
+    for dirpath, subdirs, files in os.walk(FLAGS.local):
         evaluate_directory(dirpath, files)
 
 
@@ -168,13 +213,13 @@ def evaluate_directory(dirpath, files):
 
 def evaluate_file(dirpath, filename):
     f = os.path.join(dirpath, filename)
-    report = FLAGS.reportdir + f[len(FLAGS.destination):]
+    report = FLAGS.reportdir + f[len(FLAGS.local):]
     if os.path.exists(report):
         ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(f))
         rtime = datetime.datetime.utcfromtimestamp(os.path.getmtime(report))
         if rtime > ltime:
             return
-    testpath = dirpath.replace(FLAGS.destination, FLAGS.testdir, 1)
+    testpath = dirpath.replace(FLAGS.local, FLAGS.testdir, 1)
     for dp, sd, tests in os.walk(testpath):
         run_tests(dp, tests, f)
 
@@ -209,10 +254,10 @@ def eval_submission(submission, report, tst):
     return tst.test(submission, report, sut)
 
 
-def download_folders(dest):
+def download_folders(orig,dest):
     try:
         service = initialize_service()
-        contents = service.files().list(q="title='StudentFiles'").execute()
+        contents = service.files().list(q="title='"+orig+"'").execute()
         contents = service.files().list(q="'%s' in parents" % contents['items'][0]['id']).execute()
         for f in contents['items']:
             download_folder(service, f['id'], dest)
@@ -304,9 +349,9 @@ def log(str):
     LOG_FILE.write((str + '\n').encode('utf8'))
 
 
-def ensure_dir(directory):
+def ensure_dir(directory, silent=False):
     if not os.path.exists(directory):
-        log("Creating directory: %s" % directory)
+        if not silent: log("Creating directory: %s" % directory)
         os.makedirs(directory)
 
 
@@ -374,7 +419,7 @@ def is_local_file_modified(drive_file, local_file):
 def upload_all_reports():
     try:
         service = initialize_service()
-        folder = ensure_remote_folder(service, 'StudentReports')
+        folder = ensure_remote_folder(service, FLAGS.remote)
         for dirpath, subdirs, files in os.walk(FLAGS.reportdir):
             upload_directory_reports(service, folder, dirpath, files)
     except oauth2client.client.AccessTokenRefreshError:
