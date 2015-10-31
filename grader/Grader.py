@@ -89,17 +89,12 @@ def my_normalize(self, headers):
 
 http._normalize_headers = my_normalize
 
-campusvirtual_hostnames = [ 'fmoodle2%d'%i for i in range(1,7) ]
-
 class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
     def signing_base(self, request, consumer, token):
         if not hasattr(request, 'normalized_url') or request.normalized_url is None:
             raise ValueError("Base URL for request is not set.")
 
-        url = request.normalized_url
-        url = url.replace('https', 'http')
-        print 'Signing %s request with url %s' % (request.method, url)
-
+        url = request.normalized_url.replace('https', 'http')
         sig = (
             oauth2.escape(request.method),
             oauth2.escape(url),
@@ -112,48 +107,32 @@ class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
         raw = '&'.join(sig)
         return key, raw
 
-    current_host = 0
 
-    def get_hostname(self):
-        return campusvirtual_hostnames[self.current_host]
-
-    def next_hostname(self):
-        self.current_host += 1
-        self.current_host %= len(campusvirtual_hostnames)
-
-
-def lti_post_grade(url, grade, lis_result_sourcedid, headers):
-    print 'Posting %s to %s' % (grade, lis_result_sourcedid)
+def lti_post_grade(url, score, lis_result_sourcedid, headers):
+    print 'Posting %s to %s' % (score, lis_result_sourcedid)
     global message_id
     message_identifier_id = str(message_id)
     message_id +=1
-    score = float(grade)
-    if score < 0. or score > 1.0:
-        return False
     xml = generate_request_xml(message_identifier_id,
                                'replaceResult',
                                lis_result_sourcedid,
-                               score)
+                               float(score))
     headers['Content-Type'] = 'application/xml'
     consumer = oauth2.Consumer(key="clave", secret="shared")
     client = oauth2.Client(consumer)
     client.set_signature_method(SignatureMethod_CampusVirtual())
 
-    for i in range(6):
-        resp, content = client.request(url,
-                                       'POST',
-                                       body=xml, headers=headers)
-        if resp['status'] == '200':
-            print 'Success!', client.method.current_host
-            return True
+    resp, content = client.request(url,
+                                   'POST',
+                                   body=xml, headers=headers)
+    if resp['status'] == '200':
+        return True
 
-        print 'Failed with status', resp['status']
-        #print content
-        client.method.next_hostname()
     # print 'HEADERS:', headers
     # print 'BODY:', xml
     # print 'RESPONSE:', resp
     # print 'CONTENT:', content
+    print 'Request failed with status', resp['status']
     return False
 
 
