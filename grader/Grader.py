@@ -90,14 +90,19 @@ def my_normalize(self, headers):
 http._normalize_headers = my_normalize
 
 class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
+    '''
+    In CampusVirtual HTTPS traffic is handled by the front load
+    balancers.  Backend systems live into the internal intranet and
+    use plain HTTP.  Therefore in order to generate a valid OAuth
+    signature we must change the protocol in the normlized URL.
+    '''
     def signing_base(self, request, consumer, token):
         if not hasattr(request, 'normalized_url') or request.normalized_url is None:
             raise ValueError("Base URL for request is not set.")
 
-        url = request.normalized_url.replace('https', 'http')
         sig = (
             oauth2.escape(request.method),
-            oauth2.escape(url),
+            oauth2.escape(request.normalized_url.replace('https', 'http')),
             oauth2.escape(request.get_normalized_parameters()),
         )
 
@@ -111,29 +116,20 @@ class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
 def lti_post_grade(url, score, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (score, lis_result_sourcedid)
     global message_id
-    message_identifier_id = str(message_id)
-    message_id +=1
-    xml = generate_request_xml(message_identifier_id,
+    xml = generate_request_xml(str(message_id),
                                'replaceResult',
                                lis_result_sourcedid,
                                float(score))
+    message_id +=1
     headers['Content-Type'] = 'application/xml'
-    consumer = oauth2.Consumer(key="clave", secret="shared")
+    consumer = oauth2.Consumer(key=FLAGS.key, secret=FLAGS.secret)
     client = oauth2.Client(consumer)
     client.set_signature_method(SignatureMethod_CampusVirtual())
 
     resp, content = client.request(url,
                                    'POST',
                                    body=xml, headers=headers)
-    if resp['status'] == '200':
-        return True
-
-    # print 'HEADERS:', headers
-    # print 'BODY:', xml
-    # print 'RESPONSE:', resp
-    # print 'CONTENT:', content
-    print 'Request failed with status', resp['status']
-    return False
+    return resp['status'] == '200'
 
 
 def generate_request_xml(message_identifier_id, operation,

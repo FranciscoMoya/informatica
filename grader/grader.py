@@ -28,6 +28,8 @@ gflags.DEFINE_boolean('eval', False, 'Evaluate assignments')
 gflags.DEFINE_boolean('grade', False, 'Send grades to LMS')
 gflags.DEFINE_string('user', '', 'UCLM User (required for grading)')
 gflags.DEFINE_string('password', '', 'UCLM Password (required for grading)')
+gflags.DEFINE_string('key', 'clave', 'LTI Consumer key')
+gflags.DEFINE_string('secret', 'shared', 'LTI Shared secret')
 
 def main(argv):
     try:
