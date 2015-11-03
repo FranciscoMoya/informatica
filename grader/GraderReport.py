@@ -23,7 +23,7 @@ def report_exception(f, fname, expected):
     f.write('\n')
 
 def report_open(fname):
-    reportpath = fname.replace(FLAGS.destination, FLAGS.reportdir, 1)
+    reportpath = fname.replace(FLAGS.local, FLAGS.reportdir, 1)
     try:
         os.makedirs(os.path.dirname(reportpath))
     except:

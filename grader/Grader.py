@@ -55,11 +55,11 @@ def update_directory_grades(dirpath, files, headers):
             update_file_grade(dirpath, f, headers)
 
 
-def update_file_grade(dirpath, file, headers):
+def update_file_grade(dirpath, filename, headers):
     # Get report, Find grade
     # Find outcome url and sourcedid
 
-    desc = open(os.path.join(dirpath, file + '.desc'), 'r')
+    desc = open(os.path.join(dirpath, filename + '.desc'), 'r')
     sourcedid = desc.read()
     desc.close()
 
@@ -68,7 +68,7 @@ def update_file_grade(dirpath, file, headers):
     dirdesc.close()
 
     reportpath = dirpath.replace(FLAGS.local, FLAGS.reportdir, 1)
-    rpt = open(os.path.join(reportpath, file), 'r')
+    rpt = open(os.path.join(reportpath, filename), 'r')
     grade = rpt.readlines()[-1].split(': ')[-1][:-1]
     rpt.close()
 
