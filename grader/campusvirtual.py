@@ -127,31 +127,34 @@ def autenticar_campusvirtual(user, password):
 
     resp, content = rq(h, resp['location'], "GET", headers=headers)
 
+    if resp['status'] != '200':
+        raise 'Failed authentication'
+
     return headers
 
 
 def rq(h, url, method, headers=None, body=None):
-    #print method, url
-    #print headers
-    #if body:
-    #    print body
-    #print
+    print method, url
+    print headers
+    if body:
+        print body
+    print
     resp, content = h.request(url, method, headers=headers, body=body)
-    #print resp
-    #print
+    print resp
+    print
     return resp, content
 
 
 def normalize_cookie(cookie):
     ret = {}
-    cookie = cookie.replace('path=/, ', '').replace('path=/', '')
+    #cookie = cookie.replace('path=/, ', '').replace('path=/', '')
     cookie = cookie.replace('HttpOnly; ','').replace('HttpOnly, ','')
     cookie = cookie.replace('secure, ', '').replace('; secure', '')
     for c in cookie.split(';'):
         c = c.strip()
         if len(c) < 2 or 0 > c.find('='):
             continue
-        k, v = c.split('=')
+        k, v = c.split('=',1)
         if len(k) > 0 and len(v) > 0 and k != 'path' and k != 'domain':
             ret[k] = v
     cookie = ''

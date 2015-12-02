@@ -129,6 +129,10 @@ def lti_post_grade(url, score, lis_result_sourcedid, headers):
     resp, content = client.request(url,
                                    'POST',
                                    body=xml, headers=headers)
+    if resp['status'] != '200':
+        print 'REQUEST FAILED!'
+        print content
+
     return resp['status'] == '200'
 
 
