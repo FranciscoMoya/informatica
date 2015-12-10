@@ -89,30 +89,6 @@ def my_normalize(self, headers):
 
 http._normalize_headers = my_normalize
 
-class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
-    '''
-    In CampusVirtual HTTPS traffic is handled by the front load
-    balancers.  Backend systems live into the internal intranet and
-    use plain HTTP.  Therefore in order to generate a valid OAuth
-    signature we must change the protocol in the normlized URL.
-    '''
-    def signing_base(self, request, consumer, token):
-        if not hasattr(request, 'normalized_url') or request.normalized_url is None:
-            raise ValueError("Base URL for request is not set.")
-
-        sig = (
-            oauth2.escape(request.method),
-            oauth2.escape(request.normalized_url.replace('https', 'http')),
-            oauth2.escape(request.get_normalized_parameters()),
-        )
-
-        key = '%s&' % oauth2.escape(consumer.secret)
-        if token:
-            key += oauth2.escape(token.secret)
-        raw = '&'.join(sig)
-        return key, raw
-
-
 def lti_post_grade(url, score, lis_result_sourcedid, headers):
     print 'Posting %s to %s' % (score, lis_result_sourcedid)
     global message_id
@@ -124,7 +100,7 @@ def lti_post_grade(url, score, lis_result_sourcedid, headers):
     headers['Content-Type'] = 'application/xml'
     consumer = oauth2.Consumer(key=FLAGS.key, secret=FLAGS.secret)
     client = oauth2.Client(consumer)
-    client.set_signature_method(SignatureMethod_CampusVirtual())
+    client.set_signature_method(oauth2.SignatureMethod_HMAC_SHA1())
 
     resp, content = client.request(url,
                                    'POST',
