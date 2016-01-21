@@ -134,14 +134,14 @@ def autenticar_campusvirtual(user, password):
 
 
 def rq(h, url, method, headers=None, body=None):
-    print method, url
-    print headers
-    if body:
-        print body
-    print
+    # print method, url
+    # print headers
+    # if body:
+    #     print body
+    # print
     resp, content = h.request(url, method, headers=headers, body=body)
-    print resp
-    print
+    # print resp
+    # print
     return resp, content
 
 

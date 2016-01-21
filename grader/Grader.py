@@ -90,7 +90,6 @@ def my_normalize(self, headers):
 http._normalize_headers = my_normalize
 
 def lti_post_grade(url, score, lis_result_sourcedid, headers):
-    print 'Posting %s to %s' % (score, lis_result_sourcedid)
     global message_id
     xml = generate_request_xml(str(message_id),
                                'replaceResult',
@@ -105,10 +104,6 @@ def lti_post_grade(url, score, lis_result_sourcedid, headers):
     resp, content = client.request(url,
                                    'POST',
                                    body=xml, headers=headers)
-    if resp['status'] != '200':
-        print 'REQUEST FAILED!'
-        print content
-
     return resp['status'] == '200'
 
 
@@ -169,6 +164,8 @@ def evaluate_directory(dirpath, files):
 def evaluate_file(dirpath, filename):
     f = os.path.join(dirpath, filename)
     report = FLAGS.reportdir + f[len(FLAGS.local):]
+    if report_cheater(f):
+        return
     if os.path.exists(report):
         ltime = datetime.datetime.utcfromtimestamp(os.path.getmtime(f))
         rtime = datetime.datetime.utcfromtimestamp(os.path.getmtime(report))
@@ -183,6 +180,20 @@ def run_tests(testdir, tests, submission):
     for t in tests:
         if t.endswith('.py'):
             run_single_test(os.path.join(testdir, t), submission)
+
+
+def report_cheater(submission):
+    if not os.path.exists(FLAGS.cheaters):
+        return False
+    student = os.path.basename(submission)
+    with open(FLAGS.cheaters) as cheaters:
+        for l in cheaters:
+            if l.strip() == student:
+                report = report_open(submission)
+                report.write('Calificación: %f\n' % eval_cheater(submission, report))
+                report.close()
+                return True
+    return False
 
 
 def run_single_test(test, submission):
@@ -208,6 +219,15 @@ def eval_submission(submission, report, tst):
         return 0
     return tst.test(submission, report, sut)
 
+
+def eval_cheater(submission, report):
+    gradepath = submission.replace(FLAGS.local, FLAGS.reportdir, 1) + '.cheater'
+    with open(FLAGS.cheater_template) as tmpl:
+        report.write(tmpl.read())
+    if not os.path.exists(gradepath):
+        return 0.0
+    with open(gradepath) as grade:
+        return float(grade.readline())
 
 def download_folders(orig,dest):
     try:
