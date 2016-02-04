@@ -51,8 +51,9 @@ def update_all_grades():
 
 def update_directory_grades(dirpath, files, headers):
     for f in files:
-        if not f.endswith('.log') and not f.endswith('.desc'):
-            update_file_grade(dirpath, f, headers)
+        if not f.endswith('.log') and not f.endswith('.desc') and not f.endswith('.cheater'):
+            try: update_file_grade(dirpath, f, headers)
+            except: print 'Failed', dirpath, f
 
 
 def update_file_grade(dirpath, filename, headers):
@@ -72,8 +73,9 @@ def update_file_grade(dirpath, filename, headers):
     grade = rpt.readlines()[-1].split(': ')[-1][:-1]
     rpt.close()
 
+    print 'Posting grade {0} {1}/{2}'.format(grade,dirpath,filename)
     if not lti_post_grade(url, grade, sourcedid, headers):
-        print 'Error posting grade %s to %s' % (grade, url)
+        print 'Error posting grade {0} to {1}'.format(grade, url)
 
 
 message_id = 1234
@@ -158,7 +160,8 @@ def evaluate_all_assignments():
 def evaluate_directory(dirpath, files):
     for f in files:
         if not f.endswith('.log') and not f.endswith('.desc'):
-            evaluate_file(dirpath, f)
+            try: evaluate_file(dirpath, f)
+            except: print 'Failed', dirpath, f
 
 
 def evaluate_file(dirpath, filename):
@@ -405,7 +408,7 @@ def upload_all_reports():
 def upload_directory_reports(service, folder, dirpath, files):
     folder = ensure_remote_folder(service, '/StudentReports' + dirpath[7:])
     for f in files:
-        if not f.endswith('.log') and not f.endswith('.desc'):
+        if not f.endswith('.log') and not f.endswith('.desc') and not f.endswith('~'):
             upload_file_report(service, folder, dirpath, f)
 
 
@@ -421,28 +424,35 @@ def update_or_insert_report(service, parent, fname, report):
     result = service.files().list(q=q).execute()
     if result.has_key('items') and result['items']:
         gfile = result['items'][0]
-        if not is_local_file_modified(gfile, report):
-            return
-        print 'Update', report
-        time.sleep(.4)
-        service.files().update(
-            fileId = gfile['id'],
-            media_body = report,
-            body = {
-                'mimeType': 'text/plain',
-                'setModifiedDate': 'true',
-                'modifiedDate': rfc3339_date_of(report),
-                'parents':[ { 'id': parent } ] }).execute()
+        if is_local_file_modified(gfile, report):
+            update_report(service, parent, gfile, report)
     else:
-        print 'Insert', report
-        time.sleep(.4)
-        service.files().insert(
-            media_body = report,
-            body = {
-                'mimeType':'text/plain',
-                'modifiedDate': rfc3339_date_of(report),
-                'parents':[ { 'id': parent } ],
-                'title':fname }).execute()
+        insert_report(service, parent, fname, report)
+
+
+def update_report(service, parent, gfile, report):
+    print 'Update', report
+    time.sleep(.4)
+    service.files().update(
+        fileId = gfile['id'],
+        media_body = report,
+        body = {
+            'mimeType': 'text/plain',
+            'setModifiedDate': 'true',
+            'modifiedDate': rfc3339_date_of(report),
+            'parents':[ { 'id': parent } ] }).execute()
+
+
+def insert_report(service, parent, fname, report):
+    print 'Insert', report
+    time.sleep(.4)
+    service.files().insert(
+        media_body = report,
+        body = {
+            'mimeType':'text/plain',
+            'modifiedDate': rfc3339_date_of(report),
+            'parents':[ { 'id': parent } ],
+            'title':fname }).execute()
 
 
 def ensure_remote_folder(service, path):
