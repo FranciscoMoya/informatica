@@ -156,13 +156,13 @@ No podráss cambiar las respuestas una vez que pulses el botón "Finish Exam".
 
        ::
 
-          first = [10,5,0]
-          first[1] = -5
-          value = first[2]
-          print (first)
-          second = [3,1,3,value]
-          second[3] = 100
-          print (second)
+          primera = [10,5,0]
+          primera[1] = -5
+          valor = primera[2]
+          print (primera)
+          segunda = [3,1,3,valor]
+          segunda[3] = 100
+          print (segunda)
 
     .. mchoice:: pre_6
        :answer_a: Imprimirá "Hola Roger"
