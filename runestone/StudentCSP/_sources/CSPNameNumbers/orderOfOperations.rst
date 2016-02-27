@@ -63,7 +63,7 @@ El orden en que las expresiones se ejecutan es el mismo que en matemáticas y se
 
     .. blank:: 3_4_1_Order1
         :correct: ^-2$
-        :feedback1: ('.*','¿Realmente ejecutaste el programa?')
+        :feedback1: ('.*',u'¿Realmente ejecutaste el programa?')
 
         ¿Qué se imprimirá cuando pulses en el botón Run del código siguiente?
 
@@ -79,7 +79,7 @@ Puedes cambiar el orden por defecto añadiendo paréntesis alrededor de parte de
 
     .. blank:: 3_4_1_Order2
         :correct: ^6$
-        :feedback1: ('.*','¿Realmente ejecutaste el programa?')
+        :feedback1: ('.*',u'¿Realmente ejecutaste el programa?')
 
         ¿Qué se imprimirá cuando pulses en el botón Run del código siguiente?
 

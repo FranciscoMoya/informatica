@@ -60,7 +60,7 @@ El *lado derecho* de la asignación no tiene por qué ser un valor.  Puede ser u
 
     .. blank:: 3_2_1_Mult
         :correct: ^4$
-        :feedback1: ('.*','¿Realmente ejecutaste el programa?')
+        :feedback1: ('.*',u'¿Realmente ejecutaste el programa?')
 
         ¿Qué se imprimirá cuando pulses en el botón Run del código siguiente?
 
@@ -84,7 +84,7 @@ Puedes usar todos los símbolos matemáticos estándar.
 
     .. blank:: 3_2_2_Div
         :correct: ^0.333333333333$
-        :feedback1: ('.*','¿Realmente ejecutaste el programa?')
+        :feedback1: ('.*',u'¿Realmente ejecutaste el programa?')
 
         ¿Qué se imprimirá cuando pulses en el botón Run del código siguiente?
 
@@ -113,7 +113,7 @@ También hay símbolos que pueden ser usados de formas que no esperas.
 
     .. blank:: 3_2_3_Mod
         :correct: ^0$
-        :feedback1: ('.*','¿Realmente ejecutaste el programa?')
+        :feedback1: ('.*',u'¿Realmente ejecutaste el programa?')
 
         ¿Qué se imprimirá cuando pulses en el botón Run del código siguiente?
 
