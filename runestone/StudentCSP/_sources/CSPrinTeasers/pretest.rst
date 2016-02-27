@@ -11,7 +11,7 @@ Las respuestas son almacenadas en el computador en el que estás trabajando para
 
 Pulsa sobre el botón "Start" cuando estés listo para empezar el examen.  Pulsa el botón "Pause" para parar temporalmente el examen (no podrás ver las preguntas mientras dure la pausa).  Mostrará cuánto tiempo has consumido, pero tienes tiempo ilimitado.  Pulsa en el botón "Finish Exam" al final cuando hayas acabado.  Los números de respuestas correctas, erróneas y no contestadas se mostrarán en la parte inferior de la página.  Para cada pregunta se mostrará también texto de realimentación además de tu propia respuesta.
 
-No podráss cambiar las respuestas una vez que pulses el botón "Finish Exam".
+No podrás cambiar las respuestas una vez que pulses el botón "Finish Exam".
 
 .. timed:: preTest
 

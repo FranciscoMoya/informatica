@@ -32,7 +32,7 @@ Computar con tortugas
 =====================
 
 Aquí una tortuga no es un animal.
-Trabajamos con una tortuga virtual, una idea que se remonta a los años 60.  La tortuga robot original sujetaba un rotulador físico.  Los programadores estudiantes dirigían al robot usando programas, y creando dibujos con el rotulador.
+Trabajamos con una tortuga virtual, una idea que se remonta a los años 1960.  La tortuga robot original sujetaba un rotulador físico.  Los programadores estudiantes dirigían al robot usando programas, y creando dibujos con el rotulador.
 
 .. figure:: Figures/mindstorms_turtle.jpg
     :width: 200px
