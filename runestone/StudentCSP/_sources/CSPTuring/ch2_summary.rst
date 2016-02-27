@@ -42,4 +42,4 @@ El capítulo 2 incluye los siguientes conceptos de computación.
 
 .. note::
 
-   Este es el final del capítulo 1.  Nos encantaría que nos dieras realimentación sobre este capítulo en https://www.surveymonkey.com/r/ch2-student-fb (en inglés).  Puede que te interese abrir este enlace en una nueva pestaña para facilitar la vuelta a este ebook.
+   Este es el final del capítulo 2.  Nos encantaría que nos dieras realimentación sobre este capítulo en https://www.surveymonkey.com/r/ch2-student-fb (en inglés).  Puede que te interese abrir este enlace en una nueva pestaña para facilitar la vuelta a este ebook.
