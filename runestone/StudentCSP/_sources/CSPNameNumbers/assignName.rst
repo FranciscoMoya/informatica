@@ -40,7 +40,7 @@
 	:start: 1
 	:prefix: csp-3-1-
 
-.. highlight:: java
+.. highlight:: python
    :linenothreshold: 4
 
 Asignar un Nombre

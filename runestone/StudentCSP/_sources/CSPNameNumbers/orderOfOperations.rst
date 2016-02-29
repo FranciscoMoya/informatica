@@ -40,7 +40,7 @@
 	:start: 1
 	:prefix: csp-3-4-
 
-.. highlight:: java
+.. highlight:: python
    :linenothreshold: 4
 
 

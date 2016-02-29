@@ -40,7 +40,7 @@
 	:start: 1
 	:prefix: csp-3-6-
 
-.. highlight:: java
+.. highlight:: python
    :linenothreshold: 4
 
 Seguir al Ketchup Chorreando
@@ -58,15 +58,15 @@ Vamos a computar cuánto tardaría el ketchup en chorrear por una mesa.  Imagina
 
 .. codelens:: Ketchup_Speed
 
-   goteoMillasPorHora = .028
+   millasPorHora = .028
    PiesPorMilla = 5280.0
-   goteoPiesPorHora = goteoMillasPorHora * PiesPorMilla
+   piesPorHora = millasPorHora * PiesPorMilla
    MinPorHora = 60
-   goteoPiesPorMin = goteoPiesPorHora / MinPorHora
-   print("Velocidad del ketchup en pies por minuto:")
-   print(goteoPiesPorMin)
-   print("Tiempo para recorrer 4 pies en minutos:")
-   print(4 / goteoPiesPorMin)
+   piesPorMin = piesPorHora / MinPorHora
+   print("Velocidad en pies por minuto:")
+   print(piesPorMin)
+   print("Minutos para recorrer 4 pies:")
+   print(4 / piesPorMin)
 
 
 El siguiente tipo de problema es nuevo.  Muestra código correcto agrupado en bloques a la izquierda, pero el orden es incorrecto.  Tienes que arrastrar los bloques al lado derecho en el orden correcto.  Mira el vídeo a continuación para una demostración.
@@ -84,18 +84,18 @@ El siguiente tipo de problema es nuevo.  Muestra código correcto agrupado en bl
 
    El siguiente programa calcula la velocidad del ketchup en pies por <i>segundo</i>.  Arrastra los bloques de la izquierda y ponlos en el orden correcto en la derecha.  Pulsa el botón <i>Check Me</i> para comprobar tu solución.</p>
    -----
-   goteoMillasPorHora = .028
+   millasPorHora = .028
    PiesPorMilla = 5280.0
-   goteoPiesPorHora = goteoMillasPorHora * PiesPorMilla
+   piesPorHora = millasPorHora * PiesPorMilla
    =====
    MinPorHora = 60
-   goteoPiesPorMin = goteoPiesPorHora / MinPorHora
+   piesPorMin = piesPorHora / MinPorHora
    =====
    SegPorMin = 60
-   goteoPiesPorSeg = goteoPiesPorMin / SegPorMin
+   piesPorSeg = piesPorMin / SegPorMin
    =====
    print("Velocidad del ketchup:")
-   print(goteoPiesPorSeg)
+   print(piesPorSeg)
 
 .. note::
 

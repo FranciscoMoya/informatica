@@ -40,7 +40,7 @@
 	:start: 1
 	:prefix: csp-3-7-
 
-.. highlight:: java
+.. highlight:: python
    :linenothreshold: 4
 
 Pasear por la Asignación con más Generalidad
