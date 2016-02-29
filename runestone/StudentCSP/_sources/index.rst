@@ -325,7 +325,7 @@ Capítulo 18: Trabajar con datos en la web
    CSPWebData/ch18_exercises.rst
 
 
-Capítulo 20: Resumen de capacidades del computador
+Capítulo 19: Resumen de capacidades del computador
 ::::::::::::::::::::::::::::::::::::::::::::
 
 .. toctree::
