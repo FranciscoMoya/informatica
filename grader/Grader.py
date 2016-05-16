@@ -4,7 +4,8 @@
 import gflags, httplib2, logging, os, sys, re, time, datetime, traceback
 import apiclient.discovery
 import oauth2client.file, oauth2client.client, oauth2client.tools
-import importlib, oauth2, httplib2
+import importlib, httplib2
+import oauth.oauth as oauth
 from GraderReport import *
 from campusvirtual import autenticar_campusvirtual
 from xml.etree import ElementTree as etree
@@ -264,8 +265,11 @@ def renew_credentials(storage):
         CLIENT_SECRETS,
         scope = 'https://www.googleapis.com/auth/drive',
         message = MISSING_CLIENT_SECRETS_MESSAGE)
-    return oauth2client.tools.run(flow, storage)
-
+    # FIXME: argparser should be used instead of gflags and tools.argparser
+    # should be appended to application options
+    return oauth2client.tools.run_flow(flow, storage,
+                                       oauth2client.tools.argparser.parse_args({}))
+                                       
 
 def get_folder_contents(service, folder, base_path='./', depth=0):
     if FLAGS.debug:
