@@ -17,7 +17,6 @@ class Test_2(unittest.TestCase):
 
     def setUp(self):
         self.console = sys.stdout
-        print 'Redirecting...'
         sys.stdout = open('/tmp/out.txt', 'w')
 
     def tearDown(self):
