@@ -20,12 +20,9 @@ epsilon = 0.001
 
 class Test_1_1(unittest.TestCase):
     
-    def setUp(self):
-        self.expected_email = 'francisco.moya@uclm.es'
-    
     def test_my_email(self):
-        self.assertEqual(my_email(), self.expected_email)
-
+        self.assertEqual(1, my_email().count('@'))
+        self.assertTrue(my_email().endswith('uclm.es'))
 
 
 
