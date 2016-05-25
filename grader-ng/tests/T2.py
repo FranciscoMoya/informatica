@@ -1,16 +1,34 @@
 import unittest, sys
 
-from L2 import \
-    suma_rango, \
-    contar_negativos, \
-    buscar_vocal, \
-    multiplos_7_en_rango, \
-    dibujar_cuadrado, \
-    codigo_cesar, \
-    es_perfecto, \
-    cifras, \
-    compara_bazas, \
-    buscar_texto
+try: from L2 import suma_rango
+except: pass
+
+try: from L2 import contar_negativos
+except: pass
+
+try: from L2 import buscar_vocal
+except: pass
+
+try: from L2 import multiplos_7_en_rango
+except: pass
+
+try: from L2 import dibujar_cuadrado
+except: pass
+
+try: from L2 import codigo_cesar
+except: pass
+
+try: from L2 import es_perfecto
+except: pass
+
+try: from L2 import cifras
+except: pass
+
+try: from L2 import compara_bazas
+except: pass
+
+try: from L2 import buscar_texto
+except: pass
 
 
 class Test_2(unittest.TestCase):
