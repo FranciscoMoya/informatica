@@ -1,18 +1,18 @@
 import unittest, sys
 
-try: from L1_2 import comunidades_autonomas
+try: from L3 import comunidades_autonomas
 except: pass
 
-try: from L1_2 import aprobados_pau
+try: from L3 import aprobados_pau
 except: pass
 
-try: from L1_2 import suspensos_pau
+try: from L3 import suspensos_pau
 except: pass
 
-try: from L1_2 import comunidad_mas_aprobados
+try: from L3 import comunidad_mas_aprobados
 except: pass
 
-try: from L1_2 import comunidad_mas_diferencia
+try: from L3 import comunidad_mas_diferencia
 except: pass
 
 csv = 'tests/pcaxis637310428.csv'
