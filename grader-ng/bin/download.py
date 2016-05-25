@@ -81,7 +81,7 @@ def download_drive_file(dest, fileId, drive):
     fpath = os.path.join(dest, fileId)
     if os.path.exists(fpath):
         return
-
+    print('Downloading {}'.format(fpath))
     req = drive.files().get_media(fileId=fileId)
     target = io.FileIO(fpath, mode='wb')
     downloader = apiclient.http.MediaIoBaseDownload(target, req)
