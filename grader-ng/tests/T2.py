@@ -1,33 +1,33 @@
 import unittest, sys
 
-try: from L2 import suma_rango
+try: from lab import suma_rango
 except: pass
 
-try: from L2 import contar_negativos
+try: from lab import contar_negativos
 except: pass
 
-try: from L2 import buscar_vocal
+try: from lab import buscar_vocal
 except: pass
 
-try: from L2 import multiplos_7_en_rango
+try: from lab import multiplos_7_en_rango
 except: pass
 
-try: from L2 import dibujar_cuadrado
+try: from lab import dibujar_cuadrado
 except: pass
 
-try: from L2 import codigo_cesar
+try: from lab import codigo_cesar
 except: pass
 
-try: from L2 import es_perfecto
+try: from lab import es_perfecto
 except: pass
 
-try: from L2 import cifras
+try: from lab import cifras
 except: pass
 
-try: from L2 import compara_bazas
+try: from lab import compara_bazas
 except: pass
 
-try: from L2 import buscar_texto
+try: from lab import buscar_texto
 except: pass
 
 
@@ -119,7 +119,7 @@ class Test_2(unittest.TestCase):
         self.assertEqual(compara_bazas([5,12,3], [5,10,4]), 0)
     
     def test_buscar_texto(self):
-        self.assertEqual(buscar_texto('No por mucho madrugar amanece mas temrano', 'ma'), 3)
+        self.assertEqual(buscar_texto('No por mucho madrugar amanece mas temprano', 'ma'), 3)
         self.assertEqual(buscar_texto('No aparece el texto', 'pares'), 0)
         self.assertEqual(buscar_texto('Aparece el texto', 'pare'), 1)
         self.assertEqual(buscar_texto('reparepare', 'repare'), 2)

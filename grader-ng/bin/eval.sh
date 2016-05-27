@@ -2,8 +2,6 @@
 # -*- coding: utf-8; mode: python -*-
 
 import argparse, sys, os, datetime, io, logging
-import oauth2client, oauth2client.tools, oauth2client.file
-import httplib2, apiclient.discovery, apiclient.http
 import subprocess, mimetypes, configparser
 
 parser = argparse.ArgumentParser(description="Evaluate assignment running test suites")
