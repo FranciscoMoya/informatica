@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8; mode: python -*-
 
-import argparse, sys, os, datetime, io, logging, pickle, configparser
+import argparse, sys, os, datetime, io, logging, pickle, configparser, getpass, base64
+from campusvirtual import cv_authenticate, cv_submit_mark
 
 parser = argparse.ArgumentParser(description="Grade assignment based on nosetests report")
 parser.add_argument('config', nargs='?',
@@ -15,6 +16,18 @@ parser.add_argument('-R', '--report',
                     default='reports')
 parser.add_argument('-1', '--single',
                     help='Grade a single assignment')
+parser.add_argument('-u', '--user',
+                    help='UCLM user name',
+                    default='francisco.moya@uclm.es')
+parser.add_argument('-p', '--password',
+                    help='UCLM password',
+                    default=None)
+parser.add_argument('-k', '--key',
+                    help='OAuth client key',
+                    default='clave')
+parser.add_argument('-s', '--secret',
+                    help='OAuth shared secret',
+                    default='shared')
 
 ARGS = parser.parse_args(sys.argv[1:])
 logging.basicConfig(filename=os.path.join(ARGS.report,'grade.log'),
@@ -23,6 +36,9 @@ logging.basicConfig(filename=os.path.join(ARGS.report,'grade.log'),
 CONFIG = {}
 
 def main():
+    if not ARGS.password:
+        ARGS.password = getpass.getpass()
+    cv_authenticate(ARGS.user, ARGS.password)
     if ARGS.single:
         _ , course, assignment, fname = ARGS.single.split('/')
         grade_report(course, assignment, fname)
@@ -46,11 +62,17 @@ def grade_submission(course, submission):
     ( date, fname, folder, _,
       lis_outcome_service_url, lis_person_name_full, lis_result_sourcedid,
       mime_type, assignment, sid ) = submission[:10]
+    if lis_result_sourcedid.startswith('b64:'):
+        lis_result_sourcedid = base64.b64decode(lis_result_sourcedid[4:]).decode('utf8')
     logging.info ('Grading submission {}/{}/{}'.format(course, assignment, fname))
     orig = os.path.join(ARGS.report, course, assignment, fname)
     mark = parse_mark(orig)*get_config(course,assignment).getfloat('points')
-    print(mark)
-    #cv_submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark)
+    print ('Grade submission {}/{}/{}: {}'.format(course, assignment, fname, mark))
+    if cv_submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark, ARGS.key, ARGS.secret):
+        logging.info ('Grading {}/{}/{}: {}'.format(course, assignment, fname, mark))
+    else:
+        logging.info ('Failed grading {}/{}/{}: {}'.format(course, assignment, fname, mark))
+        print ('Failed')
 
 
 def parse_mark(path):
@@ -58,7 +80,6 @@ def parse_mark(path):
     with io.FileIO(path, 'r') as f:
         result = next(f).decode('utf8').strip()
         return result.count('.')/len(result)
-        
 
         
 def get_config(course, assignment):

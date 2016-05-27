@@ -1,44 +1,23 @@
-#!/usr/bin/python
 # -*- coding: utf-8; mode: python -*-
 
-import httplib2, urllib
-from BeautifulSoup import BeautifulSoup
-import hashlib, base64, hmac
+from xml.etree import ElementTree as etree
+from bs4 import BeautifulSoup
 from blist import sorteddict
+import oauth2client.file, oauth2client.client, oauth2client.tools, oauth2
+import httplib2, hashlib, base64, urllib, hmac
 
-def edit_grades(course, headers):
-    url='https://campusvirtual.uclm.es/grade/report/grader/index.php'
+cv_auth_headers = None
 
-    h = httplib2.Http(".cache")
-    #h.follow_redirects = False
-
-    resp, content = rq(h, url + '?id=%s&' % (course), "GET", headers=headers)
-
-    # Activar edición
-    p = BeautifulSoup(content)
-    f = p.find('form')
-    action = f.get('action')
-    params = {}
-    for i in f('input'):
-        if i.get('type') == 'hidden':
-            params[i.get('name')] = i.get('value')
-
-    body = urllib.urlencode(params)
-
-    resp, content = rq(h, url, "POST", headers=headers, body=body)
-
-    print (resp)
-    print (content)
-
-
-def autenticar_campusvirtual(user, password):
+def cv_authenticate(user, password):
     '''
     user	Usuario de UCLM (eg. 'francisco.moya@uclm.es')
     password	Contraseña de UCLM
-
-    Devuelve las cabeceras a usar en futuras peticiones.
     '''
-
+    global cv_auth_headers
+    
+    if cv_auth_headers:
+        return cv_auth_headers
+    
     h = httplib2.Http(".cache")
     h.follow_redirects = False
 
@@ -64,18 +43,18 @@ def autenticar_campusvirtual(user, password):
     cvh = headers
 
     if resp['status'] != '302':
-        raise 'Se esperaba redirección 302'
+        raise IOError('Se esperaba redirección 302')
 
     # SSOService
     resp, content = rq(h, resp['location'], "GET")
 
     if resp['status'] != '302':
-        raise 'Se esperaba redirección 302'
+        raise IOError('Se esperaba redirección 302')
 
     # adas.uclm.es
     resp, content = rq(h, resp['location'], "GET")
 
-    p = BeautifulSoup(content)
+    p = BeautifulSoup(content, 'lxml')
     action = p.body.find('form').get('action')
     params = {
         'adAS_i18n_theme': 'es',
@@ -87,22 +66,20 @@ def autenticar_campusvirtual(user, password):
 
     headers = {}
     headers['Content-type'] = 'application/x-www-form-urlencoded'
-    body = urllib.urlencode(params)
+    body = urllib.parse.urlencode(params)
     resp, content = rq(h, action, "POST", headers=headers, body=body)
-
-
 
     headers = {}
     headers['Content-type'] = 'application/x-www-form-urlencoded'
     headers['Cookie'] = cvh['Cookie']
 
-    p = BeautifulSoup(content)
+    p = BeautifulSoup(content, 'lxml')
     f = p.find(id='formulario1')
     action = f.get('action')
     params = {}
     for i in f('input'):
         params[i.get('name')] = i.get('value')
-    body = urllib.urlencode(params)
+    body = urllib.parse.urlencode(params)
 
     resp, content = rq(h, action, "POST", headers=headers, body=body)
 
@@ -130,6 +107,7 @@ def autenticar_campusvirtual(user, password):
     if resp['status'] != '200':
         raise SystemError('Failed authentication')
 
+    cv_auth_headers = headers
     return headers
 
 
@@ -181,34 +159,80 @@ def append_cookie(headers, resp):
     headers['Cookie'] = normalize_cookie(headers['Cookie'])
 
 
-def oauth_signature(method, url, params, key):
-    base = oauth_base_string(method, url, params)
-    return base64.b64encode(hmac.new(key,base,hashlib.sha1).digest())
 
-def oauth_base_string(method, url, params):
-    params='&'.join(['='.join((k,params[k])) for k in params])
-    return '&'.join(map(percent_encode, [method, url, params]))
+message_id = 1234
+http = httplib2.Http
+normalize = http._normalize_headers
 
-def params_from_authorization(auth):
-    p = sorteddict()
-    for i in auth.split(',')[1:]:
-        k,v = i.strip().split('=')
-        if k == 'oauth_signature':
-            oauth_signature = urllib.unquote(v[1:-1])
-            continue
-        p[percent_encode(k)] = percent_encode(urllib.unquote(v[1:-1]))
-    return p, oauth_signature
+def my_normalize(self, headers):
+    ret = normalize(self, headers)
+    for i in ret:
+        key = i[0].upper()+i[1:]
+        ret[key] = ret.pop(i)
+    return ret
+
+http._normalize_headers = my_normalize
+
+def cv_submit_mark(url, lis_result_sourcedid, mark, key, secret):
+    global cv_auth_headers
+    if not cv_auth_headers:
+        raise SystemError('You must call cv_authenticate first')
+    
+    global message_id
+    xml = generate_request_xml(str(message_id),
+                               'replaceResult',
+                               lis_result_sourcedid,
+                               mark)
+    message_id +=1
+    headers = dict(cv_auth_headers)
+    headers['Content-Type'] = 'application/xml'
+    consumer = oauth2.Consumer(key=key, secret=secret)
+    client = oauth2.Client(consumer)
+    client.set_signature_method(oauth2.SignatureMethod_HMAC_SHA1())
+
+    print ('Body:', xml)
+    resp, content = client.request(url,
+                                   'POST',
+                                   body=xml,
+                                   headers=cv_auth_headers)
+    return resp['status'] == '200'
 
 
-def params_from_postdata(data):
-    p = sorteddict()
-    for i in data.split('&'):
-        k,v = i.strip().split('=')
-        if k == 'oauth_signature':
-            oauth_signature = urllib.unquote(v)
-            continue
-        p[percent_encode(k)] = percent_encode(urllib.unquote_plus(v))
-    return p, oauth_signature
+def generate_request_xml(message_identifier_id, operation,
+                         lis_result_sourcedid, score):
+    # pylint: disable=too-many-locals
+    """
+    Generates LTI 1.1 XML for posting result to LTI consumer.
 
-def percent_encode(str):
-    return urllib.quote(str,safe='')
+    :param message_identifier_id:
+    :param operation:
+    :param lis_result_sourcedid:
+    :param score:
+    :return: XML string
+    """
+    root = etree.Element('imsx_POXEnvelopeRequest',
+                         xmlns='http://www.imsglobal.org/services/ltiv1p1/xsd/imsoms_v1p0')
+    header = etree.SubElement(root, 'imsx_POXHeader')
+    header_info = etree.SubElement(header, 'imsx_POXRequestHeaderInfo')
+    version = etree.SubElement(header_info, 'imsx_version')
+    version.text = 'V1.0'
+    message_identifier = etree.SubElement(header_info,
+                                          'imsx_messageIdentifier')
+    message_identifier.text = message_identifier_id
+    body = etree.SubElement(root, 'imsx_POXBody')
+    xml_request = etree.SubElement(body, '%s%s' % (operation, 'Request'))
+    record = etree.SubElement(xml_request, 'resultRecord')
+
+    guid = etree.SubElement(record, 'sourcedGUID')
+    sourcedid = etree.SubElement(guid, 'sourcedId')
+    sourcedid.text = lis_result_sourcedid
+    if score is not None:
+        result = etree.SubElement(record, 'result')
+        result_score = etree.SubElement(result, 'resultScore')
+        language = etree.SubElement(result_score, 'language')
+        language.text = 'en'
+        text_string = etree.SubElement(result_score, 'textString')
+        text_string.text = score.__str__()
+    ret = "<?xml version='1.0' encoding='utf-8'?>\n{}".format(
+        etree.tostring(root, encoding='utf-8'))
+    return ret
