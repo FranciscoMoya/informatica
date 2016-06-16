@@ -16,7 +16,7 @@ def buscar_vocal(s):
     return min([ x for x in pos if x >= 0 ] or [-1])
 
 def multiplos_7_en_rango(a, b):
-    return len([ x for x in range(a,b) if x%7 == 0])
+    return [ x for x in range(a,b) if x%7 == 0]
 
 def dibujar_cuadrado(w):
     w -= 2

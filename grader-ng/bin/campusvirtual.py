@@ -160,6 +160,32 @@ def append_cookie(headers, resp):
 
 
 
+
+
+class SignatureMethod_CampusVirtual(oauth2.SignatureMethod_HMAC_SHA1):
+    '''
+    In CampusVirtual HTTPS traffic is handled by the front load
+    balancers.  Backend systems live into the internal intranet and
+    use plain HTTP.  Therefore in order to generate a valid OAuth
+    signature we must change the protocol in the normlized URL.
+    '''
+    def signing_base(self, request, consumer, token):
+        if not hasattr(request, 'normalized_url') or request.normalized_url is None:
+            raise ValueError("Base URL for request is not set.")
+
+        sig = (
+            oauth2.escape(request.method),
+            oauth2.escape(request.normalized_url),
+            #oauth2.escape(request.normalized_url.replace('https', 'http')),
+            oauth2.escape(request.get_normalized_parameters()),
+        )
+
+        key = '%s&' % oauth2.escape(consumer.secret)
+        if token:
+            key += oauth2.escape(token.secret)
+        raw = '&'.join(sig)
+        return key.encode('utf8'), raw.encode('utf8')
+
 message_id = 1234
 http = httplib2.Http
 normalize = http._normalize_headers
@@ -186,15 +212,19 @@ def cv_submit_mark(url, lis_result_sourcedid, mark, key, secret):
     message_id +=1
     headers = dict(cv_auth_headers)
     headers['Content-Type'] = 'application/xml'
-    consumer = oauth2.Consumer(key=key, secret=secret)
+    consumer = oauth2.Consumer(key='clave', secret='shared')
     client = oauth2.Client(consumer)
+    #client.set_signature_method(SignatureMethod_CampusVirtual())
     client.set_signature_method(oauth2.SignatureMethod_HMAC_SHA1())
 
-    print ('Body:', xml)
+    print(cv_auth_headers)
+    print(url)
+    print(xml)
     resp, content = client.request(url,
                                    'POST',
                                    body=xml,
                                    headers=cv_auth_headers)
+    print (content)
     return resp['status'] == '200'
 
 
@@ -234,5 +264,5 @@ def generate_request_xml(message_identifier_id, operation,
         text_string = etree.SubElement(result_score, 'textString')
         text_string.text = score.__str__()
     ret = "<?xml version='1.0' encoding='utf-8'?>\n{}".format(
-        etree.tostring(root, encoding='utf-8'))
+        etree.tostring(root).decode('utf8'))
     return ret

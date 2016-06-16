@@ -68,11 +68,19 @@ def run_tests(course, assignment, fname):
     dest = os.path.join(ARGS.report, course, assignment, fname)
     config = get_config(course, assignment)
     with io.FileIO(dest, 'w') as f:
+        input = eval(config['input']) if 'input' in config else ''
         print('Testing {}...'.format(orig),end='')
         logging.info('Running tests for {}'.format(orig))
-        subprocess.run(config['pre' ].format(orig), shell=True)
-        subprocess.run(config['test'].format(orig), shell=True, input='', stderr=f)
-        subprocess.run(config['post'].format(orig), shell=True)
+        if 'pre' in config:
+            subprocess.run(config['pre' ].format(orig),
+                           shell=True)
+        if 'test' in config:
+            subprocess.run(config['test'].format(orig),
+                           shell=True, stderr=f,
+                           input=input)
+        if 'post' in config:
+            subprocess.run(config['post'].format(orig),
+                           shell=True)
         print('Done')
 
 

@@ -18,7 +18,7 @@ parser.add_argument('-1', '--single',
                     help='Grade a single assignment')
 parser.add_argument('-u', '--user',
                     help='UCLM user name',
-                    default='francisco.moya@uclm.es')
+                    default='francisco.moya')
 parser.add_argument('-p', '--password',
                     help='UCLM password',
                     default=None)
@@ -68,11 +68,12 @@ def grade_submission(course, submission):
     orig = os.path.join(ARGS.report, course, assignment, fname)
     mark = parse_mark(orig)*get_config(course,assignment).getfloat('points')
     print ('Grade submission {}/{}/{}: {}'.format(course, assignment, fname, mark))
-    if cv_submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark, ARGS.key, ARGS.secret):
+    if cv_submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark,
+                      ARGS.key.encode('utf8'), ARGS.secret.encode('utf8')):
         logging.info ('Grading {}/{}/{}: {}'.format(course, assignment, fname, mark))
     else:
         logging.info ('Failed grading {}/{}/{}: {}'.format(course, assignment, fname, mark))
-        print ('Failed')
+        raise SystemError('Failed')
 
 
 def parse_mark(path):

@@ -5,7 +5,7 @@ import gflags, httplib2, logging, os, sys, re, time, datetime, traceback
 import apiclient.discovery
 import oauth2client.file, oauth2client.client, oauth2client.tools
 import importlib, httplib2
-import oauth.oauth as oauth
+import oauth2
 from GraderReport import *
 from campusvirtual import autenticar_campusvirtual
 from xml.etree import ElementTree as etree

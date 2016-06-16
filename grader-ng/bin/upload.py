@@ -19,6 +19,9 @@ parser.add_argument('-R', '--report',
 parser.add_argument('-D', '--dest',
                     help='Destination directory in Google Drive',
                     default='UploadReports')
+parser.add_argument('-f', '--force', action='append',
+                    help='Force upload of the given files',
+                    default=[])
 
 ARGS = parser.parse_args(sys.argv[1:])
 logging.basicConfig(filename=os.path.join(ARGS.report,'upload.log'),
@@ -35,6 +38,18 @@ def main():
 def upload_files():
     folderId = None
     drive = initialize_drive_service()
+    folderId = drive_destination_folder(drive)
+    forceFiles = [ os.path.basename(f) for f in ARGS.force ]
+    already_in_drive = [x for x in drive_list_folder(drive, folderId) if x not in forceFiles]
+    
+    for dirpath, subdirs, files in os.walk(ARGS.report):
+        for f in files:
+            if f.endswith('.log') or f in already_in_drive:
+                continue
+            upload_file(dirpath, f, folderId, drive)
+
+
+def drive_destination_folder(drive):
     folder = drive.files().list(q="name='{}'".format(ARGS.dest)).execute()
     if not 'files' in folder or not folder['files']:
         data = {
@@ -42,19 +57,24 @@ def upload_files():
             'mimeType' : 'application/vnd.google-apps.folder'
         }
         folder = drive.files().create(body=data, fields='id').execute()
-        folderId = folder['id']
-    else:
-        folderId = folder['files'][0]['id']
-        if len(folder['files']) > 1:
-            logging.info ('More than one {} folder, taking the first one.'.format(ARGS.dest))
-            logging.info (folder)
-    folder_contents = drive.files().list(q="'{}' in parents".format(folderId)).execute()
-    already_in_drive = folder_contents['files']
-    for dirpath, subdirs, files in os.walk(ARGS.report):
-        for f in files:
-            if f.endswith('.log') or f in already_in_drive:
-                continue
-            upload_file(dirpath, f, folderId, drive)
+        return folder['id']
+
+    if len(folder['files']) > 1:
+        logging.info ('More than one {} folder, taking the first one.'.format(ARGS.dest))
+        logging.info (folder)
+    return folder['files'][0]['id']
+
+
+def drive_list_folder(drive, folderId):
+    contents = []
+    pageToken = None
+    while True:
+        folder_contents = drive.files().list(q="'{}' in parents".format(folderId),
+                                             pageToken=pageToken).execute()
+        pageToken = folder_contents.get('nextPageToken')
+        contents += [i['name'] for i in folder_contents['files'] if i['kind'] == 'drive#file']
+        if not pageToken:
+            return contents
 
 
 def upload_file(dirpath, f, folderId, drive):
@@ -115,5 +135,6 @@ def sstr(s):
     return s
 
 
-main()
-sys.exit(0)
+if __name__ == "__main__":
+    main()
+    sys.exit(0)

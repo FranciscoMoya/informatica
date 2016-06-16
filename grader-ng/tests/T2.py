@@ -60,10 +60,10 @@ class Test_2(unittest.TestCase):
         self.assertEqual(buscar_vocal('prJ3b4 s1n V0C4L3S'), -1)
     
     def test_multiplos_7_en_rango(self):
-        self.assertEqual(multiplos_7_en_rango(1,7), 0)
-        self.assertEqual(multiplos_7_en_rango(1,14), 1)
-        self.assertEqual(multiplos_7_en_rango(7,21), 2)
-        self.assertEqual(multiplos_7_en_rango(7,77), 10)
+        self.assertEqual(multiplos_7_en_rango(1,7), [])
+        self.assertEqual(multiplos_7_en_rango(1,14), [7])
+        self.assertEqual(multiplos_7_en_rango(7,21), [7,14])
+        self.assertEqual(multiplos_7_en_rango(7,77), [7,14,21,28,35,42,49,56,63,70])
     
     def test_dibujar_cuadrado(self):
         self.assertEqual(self.std_output(dibujar_cuadrado(12)),
