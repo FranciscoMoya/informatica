@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 # -*- coding: utf-8; mode: python -*-
 
-import argparse, sys, os, datetime, io, logging, pickle, configparser, getpass, base64
+import argparse, sys, os, datetime, io, logging, pickle
+import configparser, getpass, base64
 from campusvirtual import cv_authenticate, cv_submit_mark
 
 parser = argparse.ArgumentParser(description="Grade assignment based on nosetests report")

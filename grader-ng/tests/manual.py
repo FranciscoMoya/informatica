@@ -1,7 +1,7 @@
 # encoding: utf-8
 from __future__ import print_function
 from builtins import input
-import sys
+import sys, textwrap
 
 class ManualGrading(object):
     def __init__(self, title):
@@ -19,11 +19,12 @@ class ManualGrading(object):
                 grade = float(input())
             except EOFError: raise
             except:          continue
+            if grade > points:
+                print('Debe ser <= {}'.format(points))
+                continue
             print('Comentario para {}: '.format(item))
-            self._comment += input()
-            if grade <= points:
-                return grade
-            print('Debe ser <= {}'.format(points))
+            self._comment += input() + ' '
+            return grade
 
     def new(self, item, points):
         grade = self.input_grade(item, points)
@@ -39,7 +40,7 @@ class ManualGrading(object):
     def print_output(self):
         print(self._items, file=sys.stderr)
         print('-'*70, file=sys.stderr)
-        print(self._comment, file=sys.stderr)
+        print(textwrap.fill(self._comment, 70), file=sys.stderr)
 
     @property
     def total(self):
