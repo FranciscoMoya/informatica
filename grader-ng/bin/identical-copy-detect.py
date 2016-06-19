@@ -1,78 +1,86 @@
 #!/usr/bin/python3
 # -*- coding: utf-8; mode: python -*-
 
-import argparse, sys, os, datetime, io, logging
+import argparse, sys, os, datetime, io, logging, shutil
 import subprocess, mimetypes, configparser, pickle
 
-parser = argparse.ArgumentParser(description="Get information on given submissions")
+parser = argparse.ArgumentParser(description="Detect identical copies of submissions")
 parser.add_argument('directory', nargs='?',
                     help='Submission directory',
                     default=None)
 parser.add_argument('-D', '--download',
                     help='Download directory',
                     default='download')
+parser.add_argument('-R', '--report',
+                    help='Report directory',
+                    default='reports')
 parser.add_argument('-k', '--key',
                     help='Encryption key',
                     default='8088')
-parser.add_argument('-l', '--latest', action='store_true',
-                    help='Show only latest submission',
-                    default=False)
 
 
 ARGS = parser.parse_args(sys.argv[1:])
-logging.basicConfig(filename=os.path.join(ARGS.download,'info.log'),
+logging.basicConfig(filename=os.path.join(ARGS.report,'identical.log'),
                     level=logging.INFO)
 
 def main():
     if not ARGS.directory:
-        return info_directory(ARGS.download)
+        return label_directory(ARGS.download)
     
-    if os.path.isfile(ARGS.directory):
-        return info_file(ARGS.directory)
-
-    return info_directory(ARGS.directory)
+    return label_directory(ARGS.directory)
 
 
-def info_directory(dir):
+def label_directory(dir):
     for dirpath, _, files in os.walk(dir):
         for f in files:
             if f.endswith('.log') or f.endswith('.p'): continue
-            info_file(os.path.join(dirpath,f))
+            label_file(os.path.join(dirpath,f))
 
 
-def info_file(path):
+def label_file(path):
     path, fname = os.path.split(path)
     path, assignment = os.path.split(path)
     path, course = os.path.split(path)
-    info_submission(course, fname)
+    label_submission(course, assignment, fname)
 
 
-def info_submission(course, fname):
-    logging.info ('Info submission {}/{}'.format(course, fname))
-
+def label_submission(course, assignment, fname):
+    logging.info ('Identity check {}/{}/{}'.format(course, assignment, fname))
     date, fileId, _, sig, _, name, _, mimetype, assignment, _ = get_meta(course, fname)
-    if ARGS.latest and not is_latest(fname):
+    if not is_latest(fname):
         return
-
-    print ('[{}] {} {:>20} {} {}'.format(assignment, fileId, date, sig, name))
     ident = get_identical(course, fname)
-    if len(ident) <= 1:
+    dest = os.path.join(ARGS.report, course, assignment, fname)
+    cfg = get_config(course, assignment)
+    label_report(dest, ident, int(cfg['group_size']))
+
+
+def label_report(path, ident, max_ident):
+    if len(ident) <= max_ident:
         return
-    for i in ident:
-        if ARGS.latest and not is_latest(i): continue
-        if i == fname: continue
-        _, _, _, _, _, name2, _, _, _, _ = get_meta(course, i)
-        if name2 == name: continue
-        print('    Identical to {} ({})'.format(i, name2))
+    logging.info ('Too many identical submissions for {}'.format(path))
+    copy_mark = '{:-^70}'.format(' copy policy report ')
+    with open(path + '.tmp', 'w') as to_file:
+        with open(path, 'r') as from_file:
+            for l in from_file:
+                if l.startswith(copy_mark):
+                    break
+                to_file.write(l)
+        to_file.write(copy_mark + '\n')
+        to_file.write('''
+Se han detectado coincidencias completas en las siguientes entregas:
 
+{0}
 
-CONFIG = {}
-def get_config(course, assignment):
-    if not course in CONFIG:
-        CONFIG[course] = configparser.ConfigParser()
-        CONFIG[course].read(course + '.ini')
-    return CONFIG[course][assignment]
-    
+Este ejercicio se puede realizar por un máximo de {1} personas. Por
+tanto esta entrega viola la política de copias.
+
+Si obtuviste autorización para realizarlo entre {2} personas debes
+comunicarlo al equipo docente para que no lo tenga en cuenta en la
+evaluación.
+'''.format('\n'.join(ident), max_ident, len(ident)))
+    shutil.move(path + '.tmp', path)
+
 
 META = {}
 by_hash = {}
@@ -102,11 +110,19 @@ def get_meta(course, fname):
 def get_identical(course, fname):
     assert(course in by_hash)
     h = by_fileId[course][fname]
-    return by_hash[course][h]
+    return [ x for x in by_hash[course][h] if is_latest(x) ]
 
 
 def is_latest(fname):
     return fname in latest_fileId
+
+
+CONFIG = {}
+def get_config(course, assignment):
+    if not course in CONFIG:
+        CONFIG[course] = configparser.ConfigParser()
+        CONFIG[course].read(course + '.ini')
+    return CONFIG[course][assignment]
 
 
 def decrypt_fields(meta):

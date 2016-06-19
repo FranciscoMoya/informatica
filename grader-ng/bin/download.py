@@ -62,32 +62,34 @@ def download_spreadsheet(dest, sid):
 
 def download_submissions(dest, submissions, drive):
     logging.info ('Download submissions to {}'.format(dest))
+    # 3rd column used for file hash
+    for s in submissions['values']:
+        s[3] = download_single_submission(dest, s, drive)
     with io.FileIO(os.path.join(dest, 'submissions.p'), 'wb') as f:
         pickle.dump(submissions, f)
-    for s in submissions['values']:
-        download_single_submission(dest, s, drive)
 
 
 def download_single_submission(dest, submission, drive):
-    ( date, fileId, folder, _,
+    ( date, fileId, folder, sig,
       lis_outcome_service_url, lis_person_name_full, lis_result_sourcedid,
       mime_type, s, sid ) = submission[:10]
-    download_drive_file(os.path.join(dest, s), fileId, drive)
+    sig = download_drive_file(os.path.join(dest, s), fileId, drive)
     name = decrypt_field(lis_person_name_full, ARGS.key)
-    logging.info ('File {}/{}/{} from {}'.format(dest, s, fileId, name))
+    logging.info ('File {}/{}/{} [{}] from {}'.format(dest, s, fileId, sig, name))
+    return sig
 
 
 def download_drive_file(dest, fileId, drive):
     fpath = os.path.join(dest, fileId)
-    if os.path.exists(fpath):
-        return
-    print('Downloading {}'.format(fpath))
-    req = drive.files().get_media(fileId=fileId)
-    target = io.FileIO(fpath, mode='wb')
-    downloader = apiclient.http.MediaIoBaseDownload(target, req)
-    done = False
-    while done is False:
-        status, done = downloader.next_chunk()
+    if not os.path.exists(fpath):
+        logging.info('Downloading {}'.format(fpath))
+        req = drive.files().get_media(fileId=fileId)
+        with io.FileIO(fpath, mode='wb') as target:
+            downloader = apiclient.http.MediaIoBaseDownload(target, req)
+            done = False
+            while not done:
+                status, done = downloader.next_chunk()
+    return compute_hash(fpath)
 
 
 def makedirs_spreadsheet(dest, spreadsheet):
@@ -142,6 +144,12 @@ def decrypt_field(encrypted, passphrase):
                                    input=(encrypted+'\n').encode('utf8'),
                                    shell=True).decode('utf8')
 
+
+def compute_hash(fpath):
+    cmd_md5sum = 'md5sum -b {} | cut -f1 -d" "'
+    return subprocess.check_output(cmd_md5sum.format(fpath),
+                                   input='',
+                                   shell=True).decode('utf8').strip()
 
 def sstr(s):
     '''Assumes s a string.

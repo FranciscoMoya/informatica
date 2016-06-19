@@ -44,7 +44,7 @@ def upload_files():
     
     for dirpath, subdirs, files in os.walk(ARGS.report):
         for f in files:
-            if f.endswith('.log') or f in already_in_drive:
+            if f.endswith('.log') or f.endswith('.p') or f in already_in_drive:
                 continue
             upload_file(dirpath, f, folderId, drive)
 

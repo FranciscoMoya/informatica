@@ -3,10 +3,11 @@
 
 import argparse, sys, os, datetime, io, logging
 import subprocess, mimetypes, configparser
+import pickle, shutil
 
 parser = argparse.ArgumentParser(description="Evaluate assignment running test suites")
-parser.add_argument('config', nargs='?',
-                    help='Configuration file',
+parser.add_argument('directory', nargs='?',
+                    help='Submission directory',
                     default=None)
 parser.add_argument('-D', '--download',
                     help='Download directory',
@@ -14,43 +15,37 @@ parser.add_argument('-D', '--download',
 parser.add_argument('-R', '--report',
                     help='Report directory',
                     default='reports')
-parser.add_argument('-1', '--single',
-                    help='Evaluate a single assignment')
 
 ARGS = parser.parse_args(sys.argv[1:])
-logging.basicConfig(filename=os.path.join(ARGS.report,'report.log'),
+logging.basicConfig(filename=os.path.join(ARGS.report,'eval.log'),
                     level=logging.INFO)
 
-CONFIG = {}
 
 def main():
-    if ARGS.single:
-        _ , course, assignment, fname = ARGS.single.split('/')
-        eval_submission(course, assignment, fname)
-    elif ARGS.config:
-        course, _ = os.path.splitext(ARGS.config)
-        eval_course(course)
-    else:
-        dirpath, subdirs, files = next(os.walk(ARGS.download))
-        for course in subdirs:
-            eval_course(course)
+    if not ARGS.directory:
+        return eval_directory(ARGS.download)
+    
+    if os.path.isfile(ARGS.directory):
+        return eval_file(ARGS.directory)
+
+    return eval_directory(ARGS.directory)
 
 
-def eval_course(course):
-    logging.info ('Eval course {}'.format(course))
-    orig = os.path.join(ARGS.download, course)
-    dirpath, subdirs, files = next(os.walk(orig))
-    for assignment in subdirs:
-        eval_assignment(course, assignment)
+def eval_directory(dir):
+    logging.info ('eval_directory (dir={})'.format(dir))
+    for dirpath, _, files in os.walk(dir):
+        for f in files:
+            if f.endswith('.log') or f.endswith('.p'): continue
+            eval_file(os.path.join(dirpath,f))
 
 
-def eval_assignment(course, assignment):
-    logging.info ('Eval assignment {}/{}'.format(course, assignment))
-    orig = os.path.join(ARGS.download, course, assignment)
-    dest = os.path.join(ARGS.report, course, assignment)
-    dirpath, subdirs, files = next(os.walk(orig))
-    for f in files:
-        eval_submission(course, assignment, f)
+def eval_file(path):
+    logging.info ('eval_file (path={})'.format(path))
+    path, fname = os.path.split(path)
+    path, assignment = os.path.split(path)
+    path, course = os.path.split(path)
+    
+    eval_submission(course, assignment, fname)
 
 
 def eval_submission(course, assignment, fname):
@@ -60,7 +55,16 @@ def eval_submission(course, assignment, fname):
     if os.path.exists(dest):
         logging.info ('  Already available {}'.format(dest))
         return
+
+    for f in get_identical(course, fname):
+        orig = os.path.join(ARGS.report, course, assignment, f)
+        if os.path.exists(orig):
+            logging.info ('  Copying report from {}'.format(orig))
+            shutil.copyfile(orig, dest)
+            return
+
     run_tests(course, assignment, fname)
+        
 
         
 def run_tests(course, assignment, fname):
@@ -72,18 +76,40 @@ def run_tests(course, assignment, fname):
         print('Testing {}...'.format(orig),end='')
         logging.info('Running tests for {}'.format(orig))
         if 'pre' in config:
-            subprocess.run(config['pre' ].format(orig),
-                           shell=True)
+            try: subprocess.run(config['pre' ].format(orig), shell=True)
+            except: pass
         if 'test' in config:
-            subprocess.run(config['test'].format(orig),
-                           shell=True, stderr=f,
-                           input=input)
+            try: subprocess.run(config['test'].format(orig),
+                                shell=True, stderr=f,
+                                input=input)
+            except: pass
         if 'post' in config:
-            subprocess.run(config['post'].format(orig),
-                           shell=True)
-        print('Done')
+            try: subprocess.run(config['post'].format(orig),
+                                shell=True)
+            except: pass
+    print('Done')
 
 
+by_hash = {}
+by_fileId = {}
+
+def get_identical(course, fname):
+    if course not in by_hash:
+        load_course_metadata(course)
+    h = by_fileId[course][fname]
+    return by_hash[course][h]
+
+
+def load_course_metadata(course):
+    orig = os.path.join(ARGS.download, course)
+    with open(os.path.join(orig, 'submissions.p'), 'rb') as f:
+        sub = pickle.load(f)
+        hashes = { s[3] for s in sub['values'] }
+        by_hash[course] = { k:[s[1] for s in sub['values'] if s[3] == k] for k in hashes }
+        by_fileId[course] = { s[1]:s[3] for s in sub['values'] }
+
+
+CONFIG = {}
 def get_config(course, assignment):
     if not course in CONFIG:
         CONFIG[course] = configparser.ConfigParser()
@@ -94,26 +120,6 @@ def get_config(course, assignment):
 def ensure_dir(directory, silent=False):
     if not os.path.exists(directory):
         os.makedirs(directory)
-
-
-def decrypt_field(encrypted, passphrase):
-    cmd_openssl = 'openssl enc -d -aes-256-cbc -base64 -pass pass:{}'
-    return subprocess.check_output(cmd_openssl.format(passphrase),
-                                   input=(encrypted+'\n').encode('utf8'),
-                                   shell=True).decode('utf8')
-
-
-def sstr(s):
-    '''Assumes s a string.
-       Returns a safe string (string without conflictive chars)
-    '''
-    transtab = { 'á':'a', 'é':'e', 'í':'i', 'ó':'o', 'ú':'u',
-                 'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U',
-                 'ñ':'n', 'Ñ':'N', 'ü':'u', 'Ü':'U',
-                 ' ':'_', '/':'_'}
-    for k in transtab:
-        s = s.replace(k, transtab[k])
-    return s
 
 
 main()
