@@ -1,0 +1,33 @@
+TRABAJO EN GRUPO
+  2.0 Descarga de archivos
+  2.0 Procesamiento XML
+  0.5 Generación de gráficas
+4.5 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.2 Divide y vencerás
+  0.3 Diseño top-down
+  0.3 Código limpio
+0.8 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+5.3 TOTAL
+----------------------------------------------------------------------
+Sin tratamiento de errores de comunicación. Define una t_absoluta
+como tmax-tmin (no se de donde sale). Solo guarda un municipio y una
+fecha. No genera lo que se pide.  Es una gráfica muy poco práctica y
+no tiene en cuenta los datos disponibles. No se tienen en cuenta
+posibles errores de comunicación. No se tienen en cuenta errores en
+datos/archivos. Código repetitivo en ocasiones. División en
+funciones razonable. Abstracción de datos prácticamente inexistente.
+Cada vez que calcula algo vuelve a descargar los XML. Nombres
+razonables. Gestión de errores muy pobre. Código repetitivo en
+ocasiones. No hay banco de pruebas.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 1932.615s
+
+OK

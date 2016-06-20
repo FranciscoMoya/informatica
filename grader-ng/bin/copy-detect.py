@@ -3,7 +3,7 @@
 
 import argparse, sys, os, datetime, io, logging, shutil
 import subprocess, mimetypes, configparser, pickle
-import urllib, re
+import urllib.request, re
 import lxml.etree as ET
 
 parser = argparse.ArgumentParser(description="Use MOSS to detect plagiarism")
@@ -22,9 +22,6 @@ parser.add_argument('-M', '--moss',
 parser.add_argument('-k', '--key',
                     help='Encryption key',
                     default='8088')
-parser.add_argument('-t', '--threshold', type=float,
-                    help='Simiarity threshold to trigger plagiarism report',
-                    default=50.)
 
 
 ARGS = parser.parse_args(sys.argv[1:])
@@ -83,9 +80,10 @@ def moss_run(dir):
         components = dirpath.split(os.path.sep)
         if len(components) < 3:
             continue
+        n = len(files) + len(subdirs)
         subdirs[:] = []
         # At least there must be two different submissions
-        if len(files) < 2 and len(subdirs) < 2:
+        if n < 2:
             continue
         course, assignment = components[1:3]
         moss_assignment(course, assignment)
@@ -99,13 +97,46 @@ def moss_assignment(course, assignment):
     url = out[-1]
     print ('Results available in', url)
     logging.info ('MOSS for {}/{} ({})'.format(course, assignment, url))
+    moss_parse_report(url)
+
+
+def moss_parse_report(url):
     f = urllib.request.urlopen(url)
     encoding = f.headers['content-type'].split('charset=')[-1]
     report = ET.HTML(f.read().decode(encoding))
-    path_re = re.compile(r'moss/(.*)/(.*)/(.*) \((.*)%\)')
+    path_re = re.compile(r'moss/(.+)/(.+)/([^/ ]+)/? \((.+)%\)')
     for td in report.iter('td'):
         for a in td.iter('a'):
             course, assignment, submission, percent = path_re.match(a.text).groups()
+            percent = float(percent)
+            print (course, assignment, submission, percent)
+            config = get_config(course, assignment)
+            thr = float(config['moss_threshold'])
+            if percent < thr:
+                continue
+            for f in submission.split('_'):
+                moss_annotate_file(os.path.join(ARGS.report, course, assignment, f), url)
+
+
+def moss_annotate_file(path, url):
+    copy_mark = '{:-^70}'.format(' MOSS report ')
+    with open(path + '.tmp', 'w') as to_file:
+        with open(path, 'r') as from_file:
+            for l in from_file:
+                if l.startswith(copy_mark):
+                    break
+                to_file.write(l)
+        to_file.write(copy_mark + '\n')
+        to_file.write('''
+MOSS ha detectado coincidencias significativas con otras entregas. Consulta
+la siguiente URL para más detalles:
+
+{0}
+
+Comunica tus alegaciones por escrito mediante un mensaje en CampusVirtual al 
+equipo docente para que las tenga en cuenta en la evaluación.
+'''.format(url))
+    shutil.move(path + '.tmp', path)
     
 
 META = {}
