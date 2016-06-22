@@ -82,6 +82,7 @@ def download_single_submission(dest, submission, drive):
 def download_drive_file(dest, fileId, drive):
     fpath = os.path.join(dest, fileId)
     if not os.path.exists(fpath):
+        print('Downloading {}'.format(fpath))
         logging.info('Downloading {}'.format(fpath))
         req = drive.files().get_media(fileId=fileId)
         with io.FileIO(fpath, mode='wb') as target:
