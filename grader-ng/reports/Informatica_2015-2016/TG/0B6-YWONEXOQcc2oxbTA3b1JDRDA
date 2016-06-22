@@ -1,5 +1,33 @@
 
 ----------------------------------------------------------------------
-Ran 1 test in 1086.294s
+Ran 1 test in 12397.522s
+
+OK
+0 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.2 Código limpio
+0.2 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+2.2 TOTAL
+----------------------------------------------------------------------
+Solo descarga dos archivos. Intenta descargar el municipio 0.
+Acoplamiento de E/S y funciones. Pone como temperatura absoluta la
+media de la máxima y la mínima. La gráfica de sensación térmica
+por horas no tiene sentido.  Fechas al revés (?). El archivo
+maxmin.pdf está vacio. Solo trata el error 404. En cualquier otro
+caso asume que há tenido éxito. No usa excepciones. Acoplamiento
+excesivo, sin división de responsabilidades. Diseño pobre. Sin
+abstracción de datos.  Por ejemplo, se usan listas para los datos por
+hora, sin posibilidad de correlar con fecha.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 5757.345s
 
 OK

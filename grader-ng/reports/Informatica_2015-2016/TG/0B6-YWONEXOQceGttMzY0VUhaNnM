@@ -1,24 +1,39 @@
 TRABAJO EN GRUPO
-  0.0 Descarga de archivos
-  0.0 Procesamiento XML
-  0.0 Generación de gráficas
-0.0 Corrección funcional
+  2.0 Descarga de archivos
+  2.0 Procesamiento XML
+  2.0 Generación de gráficas
+6.0 Corrección funcional
   0.0 Errores de comunicación
   0.0 Errores en datos y archivos
 0.0 Tratamiento de excepciones
-  0.0 Divide y vencerás
-  0.0 Diseño top-down
-  0.0 Código limpio
-0.0 Estructura del programa
+  0.2 Divide y vencerás
+  0.2 Diseño top-down
+  0.2 Código limpio
+0.6 Estructura del programa
   0.0 Banco de pruebas
 0.0 Puntos extra
-0.0 TOTAL
+6.6 TOTAL
 ----------------------------------------------------------------------
-
+El tratamiento de errores en la descarga es muy primitivo. Se intenta
+la descarga de 400 municipios independientemente del número de
+municipios de la provincia. Algo de abstracción en el procesamiento
+de XML pero severas ineficiencias.  Por ejemplo, los datos numéricos
+se guardan como cadenas y se convierten a números cada vez que se
+pretende comparar. Las gráficas con datos horarios se presentan de
+una forma que no permite comparar, ni en el eje X ni en el eje Y. No
+se tratan los errores de comunicación. No se tratan errores en datos
+y archivos. Acoplamiento excesivo entre presentación y cálculo,
+descarga de XML para cada operación. Muy ineficiente. Hasta 5 niveles
+de indentación. No se aprecia diseño top-down. Código repetitivo en
+ocasiones. La temperatura máxima solo se indica para un municipio y
+una fecha, cuando muchas veces ocurre en múltiples municipios y
+varias fechas.  Ninguna abstracción de datos. Funciones legibles,
+estructuras de datos inexistentes (todo en una lista). No se
+proporcionan pruebas de ningún tipo.
 
 Máxima calificación posible: 11.0
 .
 ----------------------------------------------------------------------
-Ran 1 test in 37.744s
+Ran 1 test in 3672.753s
 
 OK

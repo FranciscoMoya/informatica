@@ -6,6 +6,7 @@ from .manual import *
 class Test_TG(unittest.TestCase):
 
     def test_manual(self):
+        print('')
         m = ManualGrading('TRABAJO EN GRUPO')
         m.add('TOTAL',
               [m.add('Corrección funcional',

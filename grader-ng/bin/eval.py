@@ -73,7 +73,7 @@ def run_tests(course, assignment, fname):
     config = get_config(course, assignment)
     with io.FileIO(dest, 'w') as f:
         input = eval(config['input']) if 'input' in config else ''
-        print('Testing {}...'.format(orig),end='')
+        print('Testing {}...'.format(orig),end='',flush=True)
         logging.info('Running tests for {}'.format(orig))
         if 'pre' in config:
             try: subprocess.run(config['pre' ].format(orig), shell=True)

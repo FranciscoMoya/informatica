@@ -1,17 +1,35 @@
-E
-======================================================================
-ERROR: test_manual (tests.Test_TG)
+TRABAJO EN GRUPO
+  2.0 Descarga de archivos
+  2.0 Procesamiento XML
+  0.5 Generación de gráficas
+4.5 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.0 Código limpio
+0.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+4.5 TOTAL
 ----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/paco/git/informatica/grader-ng/tests/TTG.py", line 13, in test_manual
-    m.new('Procesamiento XML', 2.5),
-  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 30, in new
-    grade = self.input_grade(item, points)
-  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 19, in input_grade
-    grade = float(input())
-EOFError
+El motivo para elegir 496 municipios es muy poco profesional. Se
+intenta la descarga del municipio 0 que no existe. Se intenta la
+descarga de 496 en todos los casos. Procesa dos veces el xml: una para
+temperaturas y otra para sensación. Mínimo tratamiento de errores.
+Acomplamieto de ES y procesamiento. Sin pruebas de nada. No dice de
+qué pueblo son las gráficas, las fechas en X están desordenadas,
+los máximos y los mínimos están intercambiados, la gráfica
+adicional por horas es prácticamente inútil. No se tratan errores de
+ningún tipo. Abstracción mínima. Acoplamiento de E/S con cálculo.
+Sin excepciones. Funciones con múltiples responsabilidades. Mezcla
+niveles de abstraccion en una misma función. Código repetitivo, con
+muchos niveles de anidamiento. No funciona correctamente.
 
+Máxima calificación posible: 11.0
+.
 ----------------------------------------------------------------------
-Ran 1 test in 9635.730s
+Ran 1 test in 1973.339s
 
-FAILED (errors=1)
+OK
