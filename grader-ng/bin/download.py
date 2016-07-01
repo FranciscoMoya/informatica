@@ -9,7 +9,7 @@
 import argparse, sys, os, datetime, io, logging
 import oauth2client, oauth2client.tools, oauth2client.file
 import httplib2, apiclient.discovery, apiclient.http
-import subprocess, mimetypes, pickle
+import subprocess, mimetypes, pickle, base64
 
 parser = argparse.ArgumentParser(description="Download files from Upload script",
                                  parents=[oauth2client.tools.argparser])
@@ -140,10 +140,16 @@ def ensure_dir(directory, silent=False):
 
 
 def decrypt_field(encrypted, passphrase):
-    cmd_openssl = 'openssl enc -d -aes-256-cbc -base64 -pass pass:{}'
-    return subprocess.check_output(cmd_openssl.format(passphrase),
-                                   input=(encrypted+'\n').encode('utf8'),
-                                   shell=True).decode('utf8')
+    try: 
+        with open(os.devnull, 'w') as devnull:
+            encrypted = base64.b64decode(encrypted)
+            cmd_openssl = 'openssl enc -d -aes-256-cbc -pass pass:{}'
+            return subprocess.check_output(cmd_openssl.format(passphrase),
+                            input=encrypted,
+                            stderr=devnull,
+                            shell=True).decode('utf8')
+    except:
+        return encrypted
 
 
 def compute_hash(fpath):

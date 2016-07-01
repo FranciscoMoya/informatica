@@ -110,31 +110,6 @@ def renew_credentials(storage):
     return oauth2client.tools.run_flow(flow, storage, ARGS)
 
 
-def ensure_dir(directory, silent=False):
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-
-def decrypt_field(encrypted, passphrase):
-    cmd_openssl = 'openssl enc -d -aes-256-cbc -base64 -pass pass:{}'
-    return subprocess.check_output(cmd_openssl.format(passphrase),
-                                   input=(encrypted+'\n').encode('utf8'),
-                                   shell=True).decode('utf8')
-
-
-def sstr(s):
-    '''Assumes s a string.
-       Returns a safe string (string without conflictive chars)
-    '''
-    transtab = { 'á':'a', 'é':'e', 'í':'i', 'ó':'o', 'ú':'u',
-                 'Á':'A', 'É':'E', 'Í':'I', 'Ó':'O', 'Ú':'U',
-                 'ñ':'n', 'Ñ':'N', 'ü':'u', 'Ü':'U',
-                 ' ':'_', '/':'_'}
-    for k in transtab:
-        s = s.replace(k, transtab[k])
-    return s
-
-
 if __name__ == "__main__":
     main()
     sys.exit(0)

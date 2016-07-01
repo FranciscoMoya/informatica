@@ -2,7 +2,7 @@
 # -*- coding: utf-8; mode: python -*-
 
 import argparse, sys, os, datetime, io, logging
-import subprocess, mimetypes, configparser, pickle
+import subprocess, mimetypes, configparser, pickle, base64
 
 parser = argparse.ArgumentParser(description="Get information on given submissions")
 parser.add_argument('directory', nargs='?',
@@ -119,11 +119,14 @@ def decrypt_row(v):
 
     
 def decrypt_field(encrypted, passphrase):
-    try:
-        cmd_openssl = 'openssl enc -d -aes-256-cbc -base64 -pass pass:{}'
-        return subprocess.check_output(cmd_openssl.format(passphrase),
-                                       input=(encrypted+'\n').encode('utf8'),
-                                       shell=True).decode('utf8')
+    try: 
+        with open(os.devnull, 'w') as devnull:
+            encrypted = base64.b64decode(encrypted)
+            cmd_openssl = 'openssl enc -d -aes-256-cbc -pass pass:{}'
+            return subprocess.check_output(cmd_openssl.format(passphrase),
+                            input=encrypted,
+                            stderr=devnull,
+                            shell=True).decode('utf8')
     except:
         return encrypted
 
