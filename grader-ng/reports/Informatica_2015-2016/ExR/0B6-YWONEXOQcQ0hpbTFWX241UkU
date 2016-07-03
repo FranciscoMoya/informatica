@@ -1,0 +1,74 @@
+EFFFEF
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+TypeError: 'NoneType' object has no attribute '__getitem__'
+
+======================================================================
+ERROR: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+NameError: global name 'pi_leibniz' is not defined
+
+======================================================================
+FAIL: test_frequent_browsers (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 60, in test_frequent_browsers
+    self.assertEqual(frequent_browsers('tests/access.log'), [])
+AssertionError: Lists differ: [('"Mozilla', 127), ('"Mozilla... != []
+
+First list contains 1535 additional elements.
+First extra element 0:
+('"Mozilla', 127)
+
+Diff is 34812 characters long. Set self.maxDiff to None to see it.
+
+======================================================================
+FAIL: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 37, in test_imprimir_hex
+    '\\_/'])
+AssertionError: Lists differ: [' -', '/ \\', '\\ /', ' -'] != [' _', '/ \\', '\\_/']
+
+First differing element 0:
+' -'
+' _'
+
+First list contains 1 additional elements.
+First extra element 3:
+' -'
+
+- [' -', '/ \\', '\\ /', ' -']
+?    ^              ^  ------
+
++ [' _', '/ \\', '\\_/']
+?    ^              ^
+
+
+======================================================================
+FAIL: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 95, in test_mediana
+    self.assertEqual(mediana(range(10)), 4.5)
+AssertionError: 5 != 4.5
+
+======================================================================
+FAIL: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 101, in test_validar_tarjeta
+    self.assertFalse(validar_tarjeta('4578463073273940'))
+AssertionError: '4578463073273940' is not false
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.409s
+
+FAILED (errors=2, failures=4)

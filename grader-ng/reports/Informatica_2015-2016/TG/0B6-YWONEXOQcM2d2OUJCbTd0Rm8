@@ -1,0 +1,17 @@
+E
+======================================================================
+ERROR: test_manual (tests.Test_TG)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TTG.py", line 13, in test_manual
+    [m.new('Descarga de archivos', 2.5),
+  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 30, in new
+    grade = self.input_grade(item, points)
+  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 19, in input_grade
+    grade = float(input())
+EOFError
+
+----------------------------------------------------------------------
+Ran 1 test in 134.905s
+
+FAILED (errors=1)

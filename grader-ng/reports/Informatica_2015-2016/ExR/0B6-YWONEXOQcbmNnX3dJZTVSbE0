@@ -1,0 +1,76 @@
+EEFEEE
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+NameError: global name 'butterworth' is not defined
+
+======================================================================
+ERROR: test_frequent_browsers (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 60, in test_frequent_browsers
+    self.assertEqual(frequent_browsers('tests/access.log'), [])
+NameError: global name 'frequent_browsers' is not defined
+
+======================================================================
+ERROR: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 94, in test_mediana
+    self.assertEqual(mediana(range(9)), 4)
+NameError: global name 'mediana' is not defined
+
+======================================================================
+ERROR: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+NameError: global name 'pi_leibniz' is not defined
+
+======================================================================
+ERROR: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 99, in test_validar_tarjeta
+    self.assertTrue(validar_tarjeta('4578463073273942'))
+NameError: global name 'validar_tarjeta' is not defined
+
+======================================================================
+FAIL: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 37, in test_imprimir_hex
+    '\\_/'])
+AssertionError: Lists differ: [' _', '/  \\', '\\_/'] != [' _', '/ \\', '\\_/']
+
+First differing element 1:
+'/  \\'
+'/ \\'
+
+- [' _', '/  \\', '\\_/']
+?          -
+
++ [' _', '/ \\', '\\_/']
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+FAILED (errors=5, failures=1)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  No entiende el bucle for:
+  for j in range(n):
+    if j >=1:
+      ...
+  Devuelve mensajes en caso de n<1.  Solo funciona para n=2.
+
+Total: 0.7

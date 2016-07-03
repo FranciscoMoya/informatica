@@ -1,0 +1,92 @@
+EEFEEE
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+NameError: global name 'butterworth' is not defined
+
+======================================================================
+ERROR: test_frequent_browsers (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 60, in test_frequent_browsers
+    self.assertEqual(frequent_browsers('tests/access.log'), [])
+NameError: global name 'frequent_browsers' is not defined
+
+======================================================================
+ERROR: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 94, in test_mediana
+    self.assertEqual(mediana(range(9)), 4)
+NameError: global name 'mediana' is not defined
+
+======================================================================
+ERROR: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+NameError: global name 'pi_leibniz' is not defined
+
+======================================================================
+ERROR: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 100, in test_validar_tarjeta
+    self.assertTrue(validar_tarjeta('5328845898315140'))
+  File "/home/paco/git/informatica/grader-ng/lab.py", line 31, in validar_tarjeta
+    if suma%t[15]==0:
+ZeroDivisionError: integer division or modulo by zero
+
+======================================================================
+FAIL: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 44, in test_imprimir_hex
+    ' \\__/'])
+AssertionError: Lists differ: ['  __', '// \\  \\', '\\_\\_/... != ['  __', ' /  \\', '/    \\', ...
+
+First differing element 1:
+'// \\  \\'
+' /  \\'
+
+Second list contains 2 additional elements.
+First extra element 3:
+'\\    /'
+
+- ['  __', '// \\  \\', '\\_\\_//']
++ ['  __', ' /  \\', '/    \\', '\\    /', ' \\__/']
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.003s
+
+FAILED (errors=5, failures=1)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Un bucle con una sola iteración y donde no se usa el índice
+  i. Errores con print. No se parece en absoluto a lo que debe
+  imprimir para cualquier longitud > 1.
+
+Total: 0.5
+
+----------------------------------------------------------------------
+
+validar_tarjeta:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Tipos de retorno incorrectos, variables sin usar. Mal indentado, no
+  multiplica por 2 ni sustituye el 0 por 10 en el último dígito, ni
+  suma los impares.
+
+Total PP: 0.5

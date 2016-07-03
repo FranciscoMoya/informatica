@@ -1,0 +1,109 @@
+EEEEEE
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+NameError: global name 'butterworth' is not defined
+
+======================================================================
+ERROR: test_frequent_browsers (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 60, in test_frequent_browsers
+    self.assertEqual(frequent_browsers('tests/access.log'), [])
+NameError: global name 'frequent_browsers' is not defined
+
+======================================================================
+ERROR: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 34, in test_imprimir_hex
+    self.assertEqual(self.std_output(imprimir_hex(1)),
+NameError: global name 'imprimir_hex' is not defined
+
+======================================================================
+ERROR: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 94, in test_mediana
+    self.assertEqual(mediana(range(9)), 4)
+NameError: global name 'mediana' is not defined
+
+======================================================================
+ERROR: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+NameError: global name 'pi_leibniz' is not defined
+
+======================================================================
+ERROR: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 99, in test_validar_tarjeta
+    self.assertTrue(validar_tarjeta('4578463073273942'))
+NameError: global name 'validar_tarjeta' is not defined
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+FAILED (errors=6)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Dice el enunciado: ``No se entregará nada más que el código
+  solicitado en un único archivo Python. La entrega no contendrá
+  pruebas ni código que no corresponda a lo solicitado.''.  En cambio
+  contiene pruebas.
+
+  Mal el manejo de errores. Devolver False no es la opción correcta,
+  el enunciado no dice que deba devolver nada.
+
+butterworth:
+  Corrección funcional: 0
+  Tratamiento de errores: 0
+  Estructura: 0.6
+
+  Función vacía. Errores de tipos y precedencia (e.g. 1/2*n).
+
+
+Total: 3.05
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  La función no tiene ningún sentido. Los bucles no tienen ningún
+  efecto, los tipo de datos están mal (división entera), las
+  expresiones están mal.
+
+mediana:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Solo funciona para listas con número impar de elementos. Lo que hace
+  con el caso de elementos pares no tiene ningún sentido, devuelve
+  (len(L)-1)/2.0
+
+
+validar_tarjeta:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0.4
+  Estructura: 0.6
+
+  No suma los elementos impares, resta 9 a los 9, usa el penúltimo
+  dígito en lugar del último para hacer el módulo.
+
+Total PP: 3.45

@@ -1,0 +1,107 @@
+EEFFFE
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+  File "/home/paco/git/informatica/grader-ng/lab.py", line 25, in butterworth
+    Kd=m.sqrt(ecuacion1/ecuacion2)
+NameError: global name 'm' is not defined
+
+======================================================================
+ERROR: test_frequent_browsers (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 60, in test_frequent_browsers
+    self.assertEqual(frequent_browsers('tests/access.log'), [])
+NameError: global name 'frequent_browsers' is not defined
+
+======================================================================
+ERROR: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 99, in test_validar_tarjeta
+    self.assertTrue(validar_tarjeta('4578463073273942'))
+NameError: global name 'validar_tarjeta' is not defined
+
+======================================================================
+FAIL: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 37, in test_imprimir_hex
+    '\\_/'])
+AssertionError: Lists differ: ['   __', '  /  /', '  /    /'... != [' _', '/ \\', '\\_/']
+
+First differing element 0:
+'   __'
+' _'
+
+First list contains 1 additional elements.
+First extra element 3:
+'   __'
+
+- ['   __', '  /  /', '  /    /', '   __']
++ [' _', '/ \\', '\\_/']
+
+======================================================================
+FAIL: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 95, in test_mediana
+    self.assertEqual(mediana(range(10)), 4.5)
+AssertionError: 5 != 4.5
+
+======================================================================
+FAIL: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+FAILED (errors=3, failures=3)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Nombres sin sentido (numero2, separacion2). Sin dividir en tareas
+  más simples.  La parte de abajo está entera mal.  La parte de arriba
+  solo le falta cambiar el / de la derecha por un \\.  ¡Imprime los
+  errores y devuelve un número en caso de error!
+
+butterworth:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.6
+
+  Nombres sin sentido (ecuacion1, ecuacion2, ecuacion3). Error de
+  sintaxis (módulo math sin importar). Fórmulas incorrectamente
+  expresadas. n no se redondea a entero. Redundancia
+  (float...). Errores en tipos de datos (1/2*n).
+
+Total: 2.1
+
+----------------------------------------------------------------------
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento errores: 0
+  Estructura: 0.45
+
+  Aproxima pi/4, no pi. Más largo de lo necesario. Sin tratamiento de
+  errores.
+
+mediana:
+  Corrección funcional: 1.1
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Solo funciona con número impar de elementos.
+
+Total PP: 4.0

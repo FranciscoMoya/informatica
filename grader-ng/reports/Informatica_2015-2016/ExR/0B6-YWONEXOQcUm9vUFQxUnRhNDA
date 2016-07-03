@@ -1,0 +1,64 @@
+E.FFEE
+======================================================================
+ERROR: test_butterworth (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 77, in test_butterworth
+    self.assertTrue(abs(butterworth(.9, .1, 1e3, 2e3)[1]
+  File "/home/paco/git/informatica/grader-ng/lab.py", line 62, in butterworth
+    wc = float(Wp)/float(   pow(  float(1)/float(pow(Hp,2)) -1  ), float(1)/float(2*n)    )
+TypeError: pow expected at least 2 arguments, got 1
+
+======================================================================
+ERROR: test_pi_leibniz (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 89, in test_pi_leibniz
+    self.assertTrue(abs(pi_leibniz(1) - 4.) < epsilon)
+  File "/home/paco/git/informatica/grader-ng/lab.py", line 76, in pi_leibniz
+    serie = serie + np.true_divide(pow(-1,n))/float(2*n+1)
+ValueError: invalid number of arguments
+
+======================================================================
+ERROR: test_validar_tarjeta (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 99, in test_validar_tarjeta
+    self.assertTrue(validar_tarjeta('4578463073273942'))
+NameError: global name 'validar_tarjeta' is not defined
+
+======================================================================
+FAIL: test_imprimir_hex (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 37, in test_imprimir_hex
+    '\\_/'])
+AssertionError: Lists differ: [' -', '/  \\', '\\  /', ' -'] != [' _', '/ \\', '\\_/']
+
+First differing element 0:
+' -'
+' _'
+
+First list contains 1 additional elements.
+First extra element 3:
+' -'
+
+- [' -', '/  \\', '\\  /', ' -']
+?    ^     -         ^^  ------
+
++ [' _', '/ \\', '\\_/']
+?    ^              ^
+
+
+======================================================================
+FAIL: test_mediana (tests.Test_ExR)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/paco/git/informatica/grader-ng/tests/TExR.py", line 94, in test_mediana
+    self.assertEqual(mediana(range(9)), 4)
+AssertionError: 3.5 != 4
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.102s
+
+FAILED (errors=3, failures=2)
