@@ -12,3 +12,6 @@ except: pass
 
 try: from .TTG import *
 except: pass
+
+try: from .TExR import *
+except: pass

@@ -73,7 +73,8 @@ def run_tests(course, assignment, fname):
     config = get_config(course, assignment)
     with io.FileIO(dest, 'w') as f:
         input = eval(config['input']) if 'input' in config else ''
-        print('Testing {}...'.format(orig),end='',flush=True)
+        print('Testing {} into {} ...'.format(orig, dest),
+              end='',flush=True)
         logging.info('Running tests for {}'.format(orig))
         if 'pre' in config:
             try: subprocess.run(config['pre' ].format(orig), shell=True)
@@ -96,8 +97,10 @@ by_fileId = {}
 def get_identical(course, fname):
     if course not in by_hash:
         load_course_metadata(course)
-    h = by_fileId[course][fname]
-    return by_hash[course][h]
+    if fname in by_fileId[course]:
+        h = by_fileId[course][fname]
+        return by_hash[course][h]
+    return fname
 
 
 def load_course_metadata(course):
