@@ -51,3 +51,36 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Correcto pero innecesariamente complejo. Ninguna
+  abstracción. Variables de una letra.
+
+
+butterworth:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Algunas fórmulas mal (falta ceil en n y c = pow(a, -.5/n)). La
+  función tupla_resultado no existe (¿no probado?).
+
+Total: 3.65
+
+----------------------------------------------------------------------
+
+mediana:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  A medias. No hace nada
+
+
+Total PP: 0.5
