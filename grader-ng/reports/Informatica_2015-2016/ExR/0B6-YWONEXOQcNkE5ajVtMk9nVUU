@@ -58,3 +58,24 @@ First extra element 0:
 Ran 6 tests in 0.002s
 
 FAILED (errors=4, failures=2)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.3
+
+  Ni imprime ni devuelve nada. Ningún bucle se ejecuta más de una
+  iteracion. Imposible que funcione. Devuelve -1 en caso de error.
+  Replica borde inferior.
+
+butterworth:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.3
+
+  Varios errores en las expresiones (posicion de -1). 1/2*n no es
+  1./(2*n). n debe ser redondeado al alza, m no se usa.
+
+Total: 2.1

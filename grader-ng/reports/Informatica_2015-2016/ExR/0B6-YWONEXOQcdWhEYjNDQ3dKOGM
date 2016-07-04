@@ -51,3 +51,14 @@ AssertionError: False is not true
 Ran 6 tests in 0.002s
 
 FAILED (errors=5, failures=1)
+
+----------------------------------------------------------------------
+butterworth:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.5
+
+  Fórmula incorrecta (1/2*n no es 1/(2*n)) y n debe ser entero.
+  Estructura razonable, pero nula abstracción.
+
+Total: 2.5

@@ -72,3 +72,29 @@ AssertionError: '4578463073273940' is not false
 Ran 6 tests in 0.409s
 
 FAILED (errors=2, failures=4)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Incorrecto borde superior e inferior. 
+  No entiende el bucle for:
+
+  for i in range (n):
+    if i == 0:
+      ...
+
+  Imprime mensajes en caso de n<1.  Exceso de niveles de indentación.
+  La funcion imprimir_horzontal no es útil para este caso e imprime
+  espacios inútiles al final.
+
+frequent_browsers:
+  Corrección funcional:
+  Tratamiento de errores:
+  Estructura:
+
+  
+  
+Total: 0.7

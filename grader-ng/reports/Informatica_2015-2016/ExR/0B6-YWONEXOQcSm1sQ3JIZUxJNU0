@@ -51,3 +51,22 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.003s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No define la función imprimir_hex. Dice el enunciado:
+  ``No se entregará nada más que el código solicitado en un único
+  archivo Python. La entrega no contendrá pruebas ni código que no
+  corresponda a lo solicitado.'' En cambio contiene una función main e
+  instrucciones en el contexto principal.
+
+  Bordes superior e inferior incorrectos. El resto solo funciona
+  (obviando el problema de los bordes superior e inferior) hasta
+  n=13. Nombres de variables sin sentido (menos, esp, a).  Mucho más
+  complejo de lo necesario, nula abstracción.
+
+Total: 0.5

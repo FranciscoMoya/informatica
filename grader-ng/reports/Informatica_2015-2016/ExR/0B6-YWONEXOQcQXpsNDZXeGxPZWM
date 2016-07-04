@@ -62,3 +62,57 @@ AssertionError: False is not true
 Ran 6 tests in 0.010s
 
 FAILED (errors=1, failures=5)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0.2
+  Estructura: 0.2
+
+  Correcto. El if dentro del segundo for es innecesario y mala
+  práctica.
+
+
+butterworth:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Expresiones incorrectas 1/2*n no es 1/(2*n), 1/Hp**2 - 1 no es
+  1/(Hp**2 - 1), n debe redondearse por exceso.
+
+
+frequent_browsers:
+  Nada significativo para valorar.
+
+Total: 4.1
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento errores: 0
+  Estructura: 0.45
+
+  Aproxima pi/4, no pi. Más largo de lo necesario. Sin tratamiento de
+  errores.
+
+
+mediana:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Altera la lista. No funciona ni con número impar de elementos (sobra el -1).
+
+
+validar_tarjeta:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Un lío monumental con los tipos.
+
+
+Total PP: 4.15

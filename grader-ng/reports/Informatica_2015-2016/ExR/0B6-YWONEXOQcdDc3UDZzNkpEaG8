@@ -51,3 +51,26 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Tanto parte_superior y parte_inferior son incorrectos. No entiende
+  los bucles for:
+      for i in range(n):
+          if i >= 1:
+             ...
+  Bien dividido en funciones, pero mezcla niveles de abstracción.
+
+
+frequent_browsers:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona, con errores sintácticos e incompleto.
+
+  

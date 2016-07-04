@@ -51,3 +51,33 @@ AssertionError: ['4', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7', '7'
 Ran 6 tests in 0.002s
 
 FAILED (errors=3, failures=3)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Incorrecto borde superior e inferior. 
+  No entiende el bucle for:
+
+  for i in range (n):
+    if i == 0:
+      ...
+
+  Imprime mensajes en caso de n<1.  Exceso de niveles de indentación.
+  La funcion imprimir_horzontal no es útil para este caso e imprime
+  espacios inútiles al final.
+
+
+butterworth:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.5
+
+  Fórmulas incorrectas Ks debe usar división real, 1/2*n no es 1/(2*n)
+  y n debe ser entero.  Estructura razonable, pero nula abstracción.
+  Devolver una cadena es una pésima estrategia de manejo de errores.
+  
+  
+Total: 3.0

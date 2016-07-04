@@ -51,3 +51,44 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento errores: 0
+  Estructura: 0
+
+  Errores de sintaxis, no lo ha probado.  Nula abstracción. No
+  entiende los índices de los bucles for.
+
+butterworth:
+  Corrección funcional: 0.5
+  Tratamiento errores: 0
+  Estructura: 0
+
+  No entiende la diferencia entre división entera y real. Fórmulas
+  incorrectas (Kd, n).
+
+Total: 1.0
+
+----------------------------------------------------------------------
+pi_leibniz:
+  Corrección funcional: 0.5
+  Tratamiento errores: 0
+  Estructura: 0
+
+  Nombres engañosos (cont no es un contador). Computa un término más
+  de lo que se pide.  No entiende la diferencia entre división entera
+  y real. Incorrecta la fórmula (usa n en todos los términos en lugar
+  de i).  Aproxima pi/4 en lugar de pi.
+
+mediana:
+  Corrección funcional: 2.25
+  Tratamiento errores: 0
+  Estructura: 0.4
+
+  Correcto pero innecesariamente complejo.  En caso impar basta
+  posición = n/2 y en caso par posicion2 = n/2-1. ¿Consecuencia de no
+  entender la división entera?
+
+Total PP: 3.15

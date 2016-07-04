@@ -43,3 +43,67 @@ AssertionError: False is not true
 Ran 6 tests in 0.002s
 
 FAILED (errors=4, failures=1)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0.3
+  Estructura: 0.4
+
+  Incorrecto borde superior e inferior. 
+  La funcion linea_horizontal no es útil para este caso.
+  El resto es correcto y legible.
+
+
+frequent_browsers:
+  Corrección funcional: 3.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Prácticamente correcto. Mucho más complejo de lo necesario. Mínima
+  abstracción. El primer navegador siempre tendrá contador 2, aunque
+  aparezca una sola vez.  Con un archivo vacío se producirá un error.
+
+
+butterworth:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  No está probado, true_division no existe, es true_divide, y es
+  innecesario.  La expresón de Kd está mal. La expresión de n también
+  (es un entero).
+
+Total: 7.1
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0.2
+  Estructura: 0.45
+
+  Algo más complejo de lo necesario pero casi correcto. Aproxima pi/4,
+  no pi. Faltaría programación defensiva (asserts).
+
+
+mediana:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Algo más complejo de lo necesario pero correcto. Faltaría
+  programación defensiva (asserts). Por ejemplo, prueba con lista
+  vacía.
+
+validar_tarjeta:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0.2
+  Estructura: 0.2
+
+  Los print sobran.  ¡El cálculo en los dígitos pares se descarta!
+  Más complejo de lo necesario.  Ignoro por qué hay que ocultar la
+  excepción ValueError de int(num).
+
+Total PP: 7.75

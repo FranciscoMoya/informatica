@@ -51,3 +51,24 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 1
+  Trtatamiento de errores: 0
+  Estructura: 0
+
+  Ninguna abstracción. Innecesariamente complejo. No hace
+  correctamente los bordes superior e inferior ni la parte
+  inferior. Imprime mensaje en caso de error.
+
+frequent_browsers:
+  Corrección funcional: 1
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona. División razonable. Niveles de abstracción
+  mezclados. Errores evidentes en contar_veces (que equivaldría a
+  count) y calcular_frecuencia (no actualiza el diccionario).
+
+Total: 2.0

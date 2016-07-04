@@ -51,3 +51,55 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.001s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Incorrecto parte inferior. No entiende los bucles for.
+
+
+butterworth:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Mal las condiciones de error. Mal algunas expresiones. Mas complejo
+  de lo necesario.
+
+Total: 4.4
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0.2
+  Estructura: 0.2
+
+  Mucho más complejo de lo necesario pero correcto. Faltaría
+  programación defensiva (asserts).
+
+
+mediana:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Algo más complejo de lo necesario pero correcto. Faltaría
+  programación defensiva (asserts). Por ejemplo, prueba con lista
+  vacía.
+
+
+validar_tarjeta:
+  Corrección funcional: 1.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  El algoritmo es incorrecto. Tal como está es imposible que numero
+  sea >9. Devolver cadenas es una pésima estrategia de tratamiento de
+  errores.
+
+Total PP: 6.85

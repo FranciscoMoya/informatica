@@ -51,3 +51,36 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Ni se parece a lo que se pide.
+
+
+butterworth:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Lleno de errores de semántica estática. Mal las fórmulas. No
+  entiende los procedimientos ni los ámbitos de declaración.
+
+Total: 1.0
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.45
+
+  Algo más complejo de lo necesario pero casi correcto. Aproxima pi/4,
+  no pi. Faltaría programación defensiva (asserts).
+
+
+Total PP: 2.45

@@ -66,3 +66,38 @@ AssertionError: None != 4
 Ran 6 tests in 0.054s
 
 FAILED (errors=3, failures=3)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Ninguna abstracción. Innecesariamente complejo. No hace
+  correctamente los bordes superior e inferior. Imprime mensaje en
+  caso de error.
+
+frequent_browsers:
+  Corrección funcional: 1
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona. División razonable. Niveles de abstracción
+  mezclados. Errores evidentes en contar_veces (que equivaldría a
+  count) y calcular_frecuencia (no actualiza el diccionario).
+
+Total: 3.0
+
+----------------------------------------------------------------------
+
+mediana:
+  Corrección funcional: 1.25
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Altera la lista. No funciona en caso par.  Calcula mal el segundo
+  índice.
+
+
+Total PP: 1.25

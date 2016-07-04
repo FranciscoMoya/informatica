@@ -51,3 +51,51 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.001s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 1.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Error de sintaxis (coding declaration). Mal la parte
+  inferior. Devuelve cadena en caso de error.  Permite llamar con n=0.
+  Ninguna abstracción, no entiende bucles for.
+
+butterworth:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Devuelve una cadena en caso de error. Las condiciones de error son
+  incorrectas (e.g. el factor de discriminación puede ser < 1. El
+  orden del filtro es un entero, no un real.
+
+Total: 3.5
+
+----------------------------------------------------------------------
+pi_leibniz:
+  Corrección funcional: 2.25
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Mucho más complejo de lo necesario. Calcula un término mas de lo que
+  se pide.
+
+mediana:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona para número par de elementos (división entera). Imprime
+  lista. Innecesariamente complejo caso impar.
+
+validar_tarjeta:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No termina. Algoritmo completamente incorrecto.  Devuelve cadenas en
+  caso de error.
+
+Total PP: 5.25

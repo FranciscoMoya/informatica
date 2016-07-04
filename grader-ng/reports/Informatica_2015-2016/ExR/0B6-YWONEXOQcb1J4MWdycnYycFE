@@ -60,3 +60,33 @@ First extra element 3:
 Ran 6 tests in 0.101s
 
 FAILED (errors=4, failures=1)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 1.0
+  Tratamiento de errores: 0.3
+  Estructura: 0.3
+
+  Incorrecto borde superior e inferior. Incorrecto espacio entre
+  bordes izdo y dcho.
+ 
+
+frequent_browsers:
+  Corrección funcional: 3.0
+  Tratamiento de errores: 0.2
+  Estructura: 0.2
+
+  Nula abstracción. Innecesariamente complejo e ineficiente.
+
+
+butterworth:
+  Corrección funcional: 1.5
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  Aunque es funcionalmente casi correcto es mucho más complejo de lo
+  necesario.  Sorprenden expresiones como float(1) o pow(Hp, 2). Tiene
+  errores de semántica estática (no lo ha probado).  Fórmula
+  incorrecta en cálculo de n. numpy no es necesario para un logaritmo.
+
+Total: 6.7

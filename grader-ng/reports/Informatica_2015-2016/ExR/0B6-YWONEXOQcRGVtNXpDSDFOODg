@@ -60,3 +60,43 @@ AssertionError: False is not true
 Ran 6 tests in 0.002s
 
 FAILED (errors=4, failures=2)
+
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  No entiende el bucle for:
+  for j in range(n):
+    if j >=1:
+      ...
+  Devuelve mensajes en caso de n<1.  Solo funciona para n=2.
+
+
+butterworth:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0.3
+
+  Devuelve una cadena en caso de error. Las condiciones de error son
+  incorrectas (e.g. el factor de discriminación puede ser <
+  1. Devolver cadenas en caso de error es una pésima estrategia.
+
+
+Total: 3.0
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0.2
+  Estructura: 0.45
+
+  Algo más complejo de lo necesario pero casi correcto. Aproxima pi/4,
+  no pi. Faltaría programación defensiva (asserts).
+
+
+Total PP: 2.65

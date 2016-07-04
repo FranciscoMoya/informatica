@@ -51,3 +51,37 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.1
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Tiene errores de semántica estática (suma de cadena y entero) y
+  sintácticos en otros puntos. ¡Es imposible que funcione sin un solo
+  bucle!
+
+Total: 0.1
+
+----------------------------------------------------------------------
+pi_leibniz:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona nada.  No entiende los bucles, no entiende las
+  expresiones, no diferencia entre división entera y real.  La
+  variable resultado no es el resultado, sino solo un termino.
+
+mediana:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  No funciona en ningún caso.  Con número par de elementos usa los
+  indices n/2 y n/2+1 en lugar de n/2 y n/2-1.  Además hace la media
+  con división entera.  En caso impar devuelve el índice n/2 + 1 en
+  lugar de n/2.
+
+Total PP: 1.0

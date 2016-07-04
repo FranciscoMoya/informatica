@@ -60,3 +60,17 @@ First differing element 1:
 Ran 6 tests in 0.002s
 
 FAILED (errors=5, failures=1)
+
+----------------------------------------------------------------------
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  No entiende el bucle for:
+  for j in range(n):
+    if j >=1:
+      ...
+  Devuelve mensajes en caso de n<1.  Solo funciona para n=2.
+
+Total: 0.7

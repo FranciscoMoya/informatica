@@ -51,3 +51,50 @@ NameError: global name 'validar_tarjeta' is not defined
 Ran 6 tests in 0.002s
 
 FAILED (errors=6)
+
+----------------------------------------------------------------------
+
+imprimir_hex:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0.2
+
+  No entiende el bucle for:
+  for j in range(n):
+    if j >=1:
+      ...
+  Devuelve mensajes en caso de n<1.  Solo funciona para n=2.
+
+
+frequent_browsers:
+  Corrección funcional: 0.2
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  A medias, no devuelve nada.
+
+
+butterworth:
+  Corrección funcional: 0.5
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  A medias, no define n. Las fórmulas ni se parecen. Algunas
+  condiciones de error son absurdas.  Devolver una cadena es una
+  pésima estrategia de tratamiento de errores.
+
+
+Total: 1.4
+
+----------------------------------------------------------------------
+
+pi_leibniz:
+  Corrección funcional: 2.0
+  Tratamiento de errores: 0
+  Estructura: 0
+
+  Calcula un término más de lo que se pide. Aproxima pi/4 en lugar de
+  pi.
+
+
+Total PP: 2.0
