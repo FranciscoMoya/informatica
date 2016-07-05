@@ -1,17 +1,36 @@
-E
-======================================================================
-ERROR: test_manual (tests.Test_TG)
+TRABAJO EN GRUPO
+  1.0 Descarga de archivos
+  2.5 Procesamiento XML
+  0.5 Generación de gráficas
+4.0 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.0 Código limpio
+0.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+4.0 TOTAL
 ----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/home/paco/git/informatica/grader-ng/tests/TTG.py", line 13, in test_manual
-    [m.new('Descarga de archivos', 2.5),
-  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 30, in new
-    grade = self.input_grade(item, points)
-  File "/home/paco/git/informatica/grader-ng/tests/manual.py", line 19, in input_grade
-    grade = float(input())
-EOFError
+Intenta siempre la descarga de 496 archivos. El argumento para elegir
+ese número no es serio. Me gustaría saber de dónde ha salido la
+idea de que la temperatura absoluta a la que se refiere el enunciado
+es la media entre la máxima y la mínima del día.  ObtenerTempMax
+siempre devuelve todos los municipios.  Tampoco funcionaría con
+temperaturas negativas (normal en invierno). Devolver 6 diccionarios
+en ObtenerSensaMax es completamente innecesario. La gráfica sigue sin
+ecoger todos los datos y la gráfica adicional por horas sigue sin
+representar nada razonable.       Casi todos los nombres son
+engañosos. ObtenerSensaMax no obtiene la sensación térmica máxima,
+como cabría esperar por el nombre, sino todos los datos de sensación
+térmica.  Lo mismo podríamos decir de Principal, MunicipiosXML, e
+incluso ObtenerTempMax.
 
+Máxima calificación posible: 11.0
+.
 ----------------------------------------------------------------------
-Ran 1 test in 44.974s
+Ran 1 test in 3374.900s
 
-FAILED (errors=1)
+OK

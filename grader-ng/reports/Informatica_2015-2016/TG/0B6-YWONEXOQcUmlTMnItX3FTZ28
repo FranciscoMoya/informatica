@@ -1,0 +1,49 @@
+TRABAJO EN GRUPO
+  1.0 Descarga de archivos
+  1.0 Procesamiento XML
+  0.5 Generación de gráficas
+2.5 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.0 Código limpio
+0.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+2.5 TOTAL
+----------------------------------------------------------------------
+Es una verdadera barbaridad meter en el programa todas las URL de
+todos los pueblos. Estáis equivocando el objetivo, no se trata de que
+pase las pruebas, se trata de que podáis programar ordenadores como
+una herramienta más de vuestra vida profesional.  Si no se desarrolla
+el pensamiento computacional no hay nada que hacer.  Solamente el
+hecho de que se piense en meter todo esto en el archivo como una
+posibilidad ya es un indicio de que no hay pensamiento computacional
+detrás. El procesamiento del XML solo revela que hay severas
+carencias en cuanto a manejo del lenguaje.  Descarga el XML, mete todo
+en una lista l2 y luego lo vuelve a meter en otra lista l3 de otra
+forma.  Evidentemente es evitable este trasiego pero me parece mucho
+más grave el cómo se hace.  Todavía no pensáis en términos del
+lenguaje.  Si el número de iteraciones es conocido no se usa un
+while, se usa un for.  Si hay que contar de 3 en 3 se usa un rango con
+valor de salto (range(0,n,3)). Si en realidad no quieres l2 ni l3 sino
+d2 habría que pensar en eso desde el principio.  Cuando se leen los
+XML ya se puede construir d2.  Eto revela que no se ha usado diseño
+top-down sino bottom-up, y bottom-up sin experiencia es un desastre
+seguro. Las gráficas siguen sin mostrar la información disponible.
+Hay sensación térmica mínima y máxima para al menos 7 días y
+predicciones en 4 horas para los próximos 2 días al menos (puede que
+más). La consecuencia de meter todas las URL en el código es que es
+muy difícil de depurar. Ahora no funciona la provincia de Toledo.
+El código es tremendamente repetitivo, los nombres son poco
+descriptivos (l2,l3,d2,Ja,LaP,municipio,...) y toda la funcionalidad
+está en una sola función.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 1681.995s
+
+OK

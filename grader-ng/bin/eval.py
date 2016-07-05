@@ -53,6 +53,7 @@ def eval_submission(course, assignment, fname):
     dest = os.path.join(ARGS.report, course, assignment, fname)
     ensure_dir(os.path.dirname(dest))
     if os.path.exists(dest):
+        print('{}{}{} was already evaluated'.format(course, assignment, fname))
         logging.info ('  Already available {}'.format(dest))
         return
 

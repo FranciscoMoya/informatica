@@ -1,0 +1,34 @@
+TRABAJO EN GRUPO
+  2.5 Descarga de archivos
+  2.0 Procesamiento XML
+  2.0 Generación de gráficas
+6.5 Corrección funcional
+  0.2 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.2 Tratamiento de excepciones
+  0.5 Divide y vencerás
+  0.0 Diseño top-down
+  0.5 Código limpio
+1.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+7.7 TOTAL
+----------------------------------------------------------------------
+ Aunque se ve un esfuerzo notable por incorporar abstracciones
+todavía quedan muchos detalles que pulir.  Por ejemplo, se construyen
+dos veces todos los municipios (líneas 115 y 117 de TrabajoAEMET.py).
+Los datos horarios no están adecuadamente representados en el eje X.
+Tampoco se limpia apropiadamente la figura cuando hhay múltiples
+municipios.  En algunos casos falta la predicción de alguna hora
+concreta.  No es posible representarlo con el modelo que usais.
+Defectos en el modelo, como el ya señalado y otros, sería inmediato
+detectarlos con un diseño top-down de verdad.  Aunque el programa
+principal se llame Prueba no es una prueba.  Repasad las
+transparencias sobre depuración y prueba.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 21195.246s
+
+OK
