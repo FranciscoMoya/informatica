@@ -1,0 +1,26 @@
+TRABAJO EN GRUPO
+  1.5 Descarga de archivos
+  1.5 Procesamiento XML
+  0.0 Generación de gráficas
+3.0 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.0 Código limpio
+0.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+3.0 TOTAL
+----------------------------------------------------------------------
+Intenta descargar 500 siempre. Sin ningún tipo de abstracción. Solo
+procesa los datos de temperatura máxima.  Ni guarda sensaciones
+térmicas, ni valores por horas. No hace nada de gráficas
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 511.892s
+
+OK
