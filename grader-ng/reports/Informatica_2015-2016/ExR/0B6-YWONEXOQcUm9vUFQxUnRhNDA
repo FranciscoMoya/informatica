@@ -92,3 +92,21 @@ butterworth:
   incorrecta en cálculo de n. numpy no es necesario para un logaritmo.
 
 Total: 6.7
+
+----------------------------------------------------------------------
+mediana:
+  Corrección funcional: 1.5
+  Tratamiento de errores: 0.3
+  Estructura: 0.45
+
+  Solo funciona en el caso de número de elementos par.
+
+pi_leibniz:
+  Corrección funcional: 1.5
+  Tratamiento de errores: 0.1
+  Estructura: 0.4
+
+  Tiene errores sintácticos, pero es casi correcto. No se por qué
+  quieres usar true_divide en todo, generalmente no es interesante.
+
+Total PP: 4.25

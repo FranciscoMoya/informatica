@@ -3,7 +3,7 @@
 
 import argparse, sys, os, datetime, io, logging, pickle
 import configparser, getpass, base64
-from campusvirtual import cv_authenticate, cv_submit_mark
+import campusvirtual as cv
 
 parser = argparse.ArgumentParser(description="Grade assignment based on nosetests report")
 parser.add_argument('config', nargs='?',
@@ -39,7 +39,7 @@ CONFIG = {}
 def main():
     if not ARGS.password:
         ARGS.password = getpass.getpass()
-    cv_authenticate(ARGS.user, ARGS.password)
+    cv.authenticate(ARGS.user, ARGS.password)
     if ARGS.single:
         _ , course, assignment, fname = ARGS.single.split('/')
         grade_report(course, assignment, fname)
@@ -69,7 +69,7 @@ def grade_submission(course, submission):
     orig = os.path.join(ARGS.report, course, assignment, fname)
     mark = parse_mark(orig)*get_config(course,assignment).getfloat('points')
     print ('Grade submission {}/{}/{}: {}'.format(course, assignment, fname, mark))
-    if cv_submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark,
+    if cv.submit_mark(lis_outcome_service_url, lis_result_sourcedid, mark,
                       ARGS.key.encode('utf8'), ARGS.secret.encode('utf8')):
         logging.info ('Grading {}/{}/{}: {}'.format(course, assignment, fname, mark))
     else:

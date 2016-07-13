@@ -25,6 +25,7 @@ abstracción de datos.  Por ejemplo, se usan listas para los datos por
 hora, sin posibilidad de correlar con fecha.
 
 Máxima calificación posible: 11.0
+Total: 2.2
 .
 ----------------------------------------------------------------------
 Ran 1 test in 5757.345s

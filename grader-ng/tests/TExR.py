@@ -20,6 +20,13 @@ except: pass
 
 epsilon = 0.001
 
+# El orden por defecto es:
+#
+# butterworth, pi_leibniz, frequent_browsers, imprimir_hex, mediana, validar_tarjeta
+#
+# Por tanto la máscara del examen es 101100
+# y la máscara de la prueba parcial es 010011
+
 class Test_ExR(unittest.TestCase):
 
     def setUp(self):

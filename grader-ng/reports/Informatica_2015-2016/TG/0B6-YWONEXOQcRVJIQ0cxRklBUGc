@@ -1,0 +1,39 @@
+TRABAJO EN GRUPO
+  1.0 Descarga de archivos
+  1.0 Procesamiento XML
+  0.5 Generación de gráficas
+2.5 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.0 Código limpio
+0.0 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+2.5 TOTAL
+----------------------------------------------------------------------
+Es una verdadera barbaridad meter en el programa todas las URL de
+todos los pueblos. Estáis equivocando el objetivo, no se trata de que
+pase las pruebas, se trata de que podáis programar ordenadores como
+una herramienta más de vuestra vida profesional.  Si no se desarrolla
+el pensamiento computacional no hay nada que hacer.  Solamente el
+hecho de que se piense en meter todo esto en el archivo como una
+posibilidad ya es un indicio de que no hay pensamiento computacional
+detrás. Sigue habiendo severas deficiencias en el código. Por
+ejemplo, d2 no se usa como diccionario, por qué un diccionario? El
+cálculo del resultado de temperatura(d) es también
+extraordinariamente ineficiente.  Se llama a max(d2.values()) en cada
+iteración y también al final, ... Las gráficas no representan nada
+útil.  En el eje de abcisas hay una mezcla de todo, hay dos gráficas
+en paralelo pero sin ningún eje común, no es una gráfica, son dos.
+Sigue sin dividirse en funciones pequeñas que se puedan probar.
+Mínima abstracción.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 1377.317s
+
+OK

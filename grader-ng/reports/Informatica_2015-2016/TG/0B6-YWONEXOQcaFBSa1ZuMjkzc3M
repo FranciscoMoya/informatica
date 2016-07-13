@@ -19,6 +19,7 @@ procesa los datos de temperatura máxima.  Ni guarda sensaciones
 térmicas, ni valores por horas. No hace nada de gráficas
 
 Máxima calificación posible: 11.0
+Total: 3.0
 .
 ----------------------------------------------------------------------
 Ran 1 test in 511.892s

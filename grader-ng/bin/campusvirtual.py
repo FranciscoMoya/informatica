@@ -8,7 +8,44 @@ import httplib2, hashlib, base64, urllib, hmac
 
 cv_auth_headers = None
 
-def cv_authenticate(user, password):
+def download_marks(course_id):
+    global cv_auth_headers
+    if not cv_auth_headers:
+        raise SystemError('You must call cv_authenticate first')
+    
+    url = 'https://campusvirtual.uclm.es/grade/export/txt/index.php?id={}'.format(course_id)
+
+    h = httplib2.Http(".cache")
+    resp, content = rq(h, url, 'GET', headers = cv_auth_headers)
+
+    p = BeautifulSoup(content, 'lxml')
+    action = p.body.find('form').get('action')
+    print('action:', action)
+
+    print(content)
+    return
+
+    # FIXME: rellenar POST request
+    # Descargar attachment
+    params = {
+        'adAS_i18n_theme': 'es',
+        'adAS_mode': 'authn',
+        'adAS_username': user,
+        'adAS_password': password,
+        'adAS_submit': 'Aceptar'
+    }
+
+    headers = cv_auth_headers.copy()
+    headers['Content-type'] = 'application/x-www-form-urlencoded'
+    body = urllib.parse.urlencode(params)
+    resp, content = rq(h, action, "POST", headers=headers, body=body)
+
+    # FIXME
+    # Extraer key/value pairs y URL de submit
+    # Hacer POST con datos
+
+
+def authenticate(user, password):
     '''
     user	Usuario de UCLM (eg. 'francisco.moya@uclm.es')
     password	Contraseña de UCLM
@@ -199,7 +236,7 @@ def my_normalize(self, headers):
 
 http._normalize_headers = my_normalize
 
-def cv_submit_mark(url, lis_result_sourcedid, mark, key, secret):
+def submit_mark(url, lis_result_sourcedid, mark, key, secret):
     global cv_auth_headers
     if not cv_auth_headers:
         raise SystemError('You must call cv_authenticate first')
@@ -210,7 +247,7 @@ def cv_submit_mark(url, lis_result_sourcedid, mark, key, secret):
                                lis_result_sourcedid,
                                mark)
     message_id +=1
-    headers = dict(cv_auth_headers)
+    headers = cv_auth_headers.copy()
     headers['Content-Type'] = 'application/xml'
     consumer = oauth2.Consumer(key='clave', secret='shared')
     client = oauth2.Client(consumer)

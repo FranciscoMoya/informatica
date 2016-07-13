@@ -1,0 +1,31 @@
+TRABAJO EN GRUPO
+  2.0 Descarga de archivos
+  0.5 Procesamiento XML
+  2.5 Generación de gráficas
+5.0 Corrección funcional
+  0.0 Errores de comunicación
+  0.0 Errores en datos y archivos
+0.0 Tratamiento de excepciones
+  0.0 Divide y vencerás
+  0.0 Diseño top-down
+  0.5 Código limpio
+0.5 Estructura del programa
+  0.0 Banco de pruebas
+0.0 Puntos extra
+5.5 TOTAL
+----------------------------------------------------------------------
+No descarga el municipio 10. Siempre intenta la descarga de 400
+municipios. Da excepción cuando la etiqueta dato no contiene valor.
+Se generan gráficas para todos los municipios.  Solo se pide para
+aquellos en los que la temperatura es máxima   Escasa división,
+dificultad de prueba. Escasa abstracción, no se utiliza diseño top-
+down, escasa división en funciones, escasa abstracción de datos.
+Algunas variables con nombre absurdo (m2) pero bastante limpio en
+general.
+
+Máxima calificación posible: 11.0
+.
+----------------------------------------------------------------------
+Ran 1 test in 1561.210s
+
+OK
