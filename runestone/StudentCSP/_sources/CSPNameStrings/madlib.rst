@@ -183,12 +183,12 @@ Puede que hayas hecho historias MadLib cuando en tu niñez.  Proporcionas alguno
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_4_4_6_WSq
 .. note::
 
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_4_4

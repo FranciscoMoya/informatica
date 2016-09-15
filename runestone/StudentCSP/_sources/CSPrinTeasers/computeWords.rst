@@ -98,5 +98,5 @@ A una cadena se le puede pedir que devuelva una nueva cadena que cambia de algun
     Discute los temas de esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_1_4

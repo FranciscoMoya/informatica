@@ -102,7 +102,7 @@ Una **rodaja** con dos valores (comienzo y final) separados por un ``:`` entre e
    s4 = frase[10:14]
    print(s4)
 
-**Comprueba tu Entendimiento**
+**Comprueba tu Comprensión**
 
 .. mchoice:: 4_2_1_Slice
    :answer_a: Esto es el final
@@ -236,7 +236,7 @@ La función ``find(cadena)`` toma una cadena como entrada y retorna el índice d
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_4_2_4_WSq
 
 .. note::
@@ -244,5 +244,5 @@ La función ``find(cadena)`` toma una cadena como entrada y retorna el índice d
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_4_2

@@ -152,5 +152,5 @@ Puesto que no se pueden tener espacios en un nombre de variable puedes juntar va
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_1

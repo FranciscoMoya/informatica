@@ -36,7 +36,7 @@ Chapter 4 Exercises
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: teachercsp_ch4ex1q
 
 #.
@@ -80,7 +80,7 @@ Chapter 4 Exercises
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: teachercsp_ch4ex3q
 
 #.

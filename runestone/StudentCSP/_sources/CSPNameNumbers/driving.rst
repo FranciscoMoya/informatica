@@ -135,5 +135,5 @@ Prueba a editar el programa anterior y ejecutarlo para contestar la siguiente pr
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_5

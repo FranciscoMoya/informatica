@@ -97,5 +97,5 @@ Cambia el peso (en libras) y la altura (en pulgadas) en el programa de arriba, d
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_1_3

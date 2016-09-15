@@ -133,5 +133,5 @@ Simplemente yendo hacia delante, detrás, izquierda y derecha, podemos hacer que
     Discute los temas de esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_1_5

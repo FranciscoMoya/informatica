@@ -94,5 +94,5 @@ Puedes cambiar el orden por defecto añadiendo paréntesis alrededor de parte de
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_4

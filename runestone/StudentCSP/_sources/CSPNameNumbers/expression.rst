@@ -141,5 +141,5 @@ Puede que no estés familiarizado con el operador **modulo** (resto) ``%``.  Dev
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_2

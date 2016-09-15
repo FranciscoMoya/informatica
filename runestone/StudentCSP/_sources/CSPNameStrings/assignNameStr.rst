@@ -161,5 +161,5 @@ Podemos actualizar nuestro ejemplo de viaje en coche para imprimir el coste del 
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_4_1

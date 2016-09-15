@@ -163,7 +163,7 @@ Te animamos a probar las siguientes respuestas copiando y pegando en el programa
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_3_8_4_WSq
 
 .. note::
@@ -171,5 +171,5 @@ Te animamos a probar las siguientes respuestas copiando y pegando en el programa
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_8

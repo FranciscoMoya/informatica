@@ -92,5 +92,5 @@ Aunque las cadenas no pueden ser cambiadas tu puedes cambiar el valor de una var
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_4_3

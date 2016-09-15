@@ -41,7 +41,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex1q
 
 #.
@@ -61,7 +61,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex2q
 
 #.
@@ -85,7 +85,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex3q
 
 #.
@@ -110,7 +110,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex4q
 
 #.
@@ -136,7 +136,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex5q
 
 #.
@@ -160,7 +160,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex6q
 
 #.
@@ -183,7 +183,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex7q
 
 #.
@@ -205,7 +205,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex8q
 
 #.
@@ -230,7 +230,7 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex9q
 
 #.
@@ -247,5 +247,5 @@ Capítulo 3 Ejercicios
         .. tab:: Discusión
 
             .. disqus::
-                :shortname: cslearn4u
+                :shortname: uclm-eii-cs
                 :identifier: studentcsp_ch3ex10q

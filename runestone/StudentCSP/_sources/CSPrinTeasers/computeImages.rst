@@ -138,5 +138,5 @@ Las líneas importantes están bajo los comentarios (líneas que comienzan por u
     Discute los temas de esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_1_6

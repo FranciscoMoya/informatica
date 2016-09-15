@@ -102,5 +102,5 @@ El siguiente tipo de problema es nuevo.  Muestra código correcto agrupado en bl
     Discute los temas tratados en esta sección con tus compañeros.
 
       .. disqus::
-          :shortname: cslearn4u
+          :shortname: uclm-eii-cs
           :identifier: studentcsp_3_6
