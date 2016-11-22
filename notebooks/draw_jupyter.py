@@ -52,6 +52,6 @@ def line(p1, p2):
     (x1, y1), (x2, y2) = p1, p2
     return '''<line x1="{}" y1="{}" 
                     x2="{}" y2="{}" 
-                    stroke-width="2" stroke="black"/>'''.format(x1,y1,x2,y2)
+                    stroke-width="1" stroke="black"/>'''.format(x1,y1,x2,y2)
 
 limpiar()
