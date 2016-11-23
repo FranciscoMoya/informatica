@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 # Copia todo esto en una celda de Jupyter y ejecútala (Shift+Intro).
 #
-# Para ver el resultado en Jupyter deber llamar a la función dibujo()
-# como última función de la celda.
+# En otra celda programa lo que se pide en el ejercicio y para ver el
+# resultado en Jupyter llama a la función dibujo() como última función
+# de la celda.
 #
 # Por ejemplo:
 #
@@ -10,7 +12,13 @@
 # avanzar(50)
 # dibujo()
 #
-# No utilices la función dibujo() en el código que envíes en el examen.
+# O para probar tus funciones:
+#
+# poligono(7,100)
+# dibujo()
+#
+# No utilices la función dibujo() en el código que envíes en el
+# examen.
 
 from IPython.display import HTML, SVG, display
 from math import pi, sin, cos

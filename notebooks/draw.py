@@ -1,3 +1,7 @@
+# Esta implementación hace uso del módulo turtle que también está
+# disponible en Brython y Skulpt.  Pero no incluyas este código en
+# tu respuesta al examen.
+
 import turtle
 from math import pi
 
