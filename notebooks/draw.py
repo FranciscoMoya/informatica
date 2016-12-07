@@ -1,5 +1,5 @@
-# Esta implementación hace uso del módulo turtle que también está
-# disponible en Brython y Skulpt.  Pero no incluyas este código en
+# Esta implementaciÃ³n hace uso del mÃ³dulo turtle que tambiÃ©n estÃ¡
+# disponible en Brython y Skulpt.  Pero no incluyas este cÃ³digo en
 # tu respuesta al examen.
 
 import turtle
