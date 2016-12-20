@@ -60,7 +60,7 @@ Resumen de Funciones de Cadenas
 
 El capítulo 4 también incluía las siguientes funciones de cadena.
 
-- **append** - Se pueden sumar dos cadenas usando el símbolo ``+``.  También se llama **concatenar**.  El resultado de ``"Feliz" + " Cumpleaños"`` is ``"Feliz Cumpleaños"``.
+- **append** - Se pueden sumar dos cadenas usando el símbolo ``+``.  También se llama **concatenar**.  El resultado de ``"Feliz" + " Cumpleaños"`` es ``"Feliz Cumpleaños"``.
 - **find** - La función find de una cadena recibe una cadena como entrada y devuelve el **índice** de la primera ocurrencia de esa cadena en la cadena sobre la que se llama a la función.  El código ``"goodbye".find('bye')`` devuelve 4.
 - **len** - La función len puede recibir una cadena como entrada y devuelve el número de caracteres de la cadena incluyendo los espacios.  Por ejemplo ``len("Hi there")`` devolverá 8.
 - **lower** - La función lower de las cadenas devuelve una nueva cadena con solo letras minúscuas.  Por ejemplo  ``"ALL CAPS".lower()`` devuelve ``"all caps"``.
