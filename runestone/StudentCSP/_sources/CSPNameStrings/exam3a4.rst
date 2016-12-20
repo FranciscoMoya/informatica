@@ -111,10 +111,10 @@ No podrás cambiar las respuestas una vez que pulses el botón "Finish Exam".
           var1 = 18
 
     .. mchoice:: e3a4_6
-       :answer_a: THIS IS A TEST
-       :answer_b: this is a test
-       :answer_c: This is a test
-       :answer_d: This is a test, really!
+       :answer_a: ESTO ES UNA PRUEBA
+       :answer_b: esto es una prueba
+       :answer_c: Esto es una prueba
+       :answer_d: Esto es una prueba, ¡en serio!
        :correct: a
        :feedback_a: Strings are immutable.  Any change to a string returns a new string.
        :feedback_b: Sería cierto si the question asked for the value of better.
@@ -129,4 +129,4 @@ No podrás cambiar las respuestas una vez que pulses el botón "Finish Exam".
           mejor = frase.lower()
           print(mejor)
           aunMejor = aunMejor.capitalize() + "."
-          mas = frase + ", ¡ en serio!"
+          mas = frase + ", ¡en serio!"
